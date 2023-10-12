@@ -43,7 +43,10 @@ export const statsCommand: Command = {
         const steamId64 = interaction.options.getString('steam', false);
 
         if (steamId64 !== null) {
-            const stats = await models.statsModel.findOne({ _id: steamId64 });
+            const [stats, levelData] = await Promise.all([
+                models.statsModel.findOne({ _id: steamId64 }),
+                models.levelsModel.findOne({ _id: `${steamId64}@steam` }),
+            ]);
             if (stats === null) {
                 await sendNoStats(
                     interaction,
@@ -56,6 +59,7 @@ export const statsCommand: Command = {
                     interaction,
                     stats,
                     steamId64,
+                    levelData,
                     config.embedColour,
                 );
             }
@@ -80,9 +84,14 @@ export const statsCommand: Command = {
             return;
         }
 
-        const stats = await models.statsModel.findOne({
-            _id: fetchedSteamData.steamId64,
-        });
+        const [stats, levelData] = await Promise.all([
+            models.statsModel.findOne({
+                _id: fetchedSteamData.steamId64,
+            }),
+            models.levelsModel.findOne({
+                _id: `${fetchedSteamData.steamId64}@steam`,
+            }),
+        ]);
 
         if (stats === null) {
             await sendNoStats(
@@ -92,7 +101,13 @@ export const statsCommand: Command = {
                 config.embedColour,
             );
         } else {
-            await sendStats(interaction, stats, targetUser, config.embedColour);
+            await sendStats(
+                interaction,
+                stats,
+                targetUser,
+                levelData,
+                config.embedColour,
+            );
         }
     },
 

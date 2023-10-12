@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 import { Config } from '../types/Config';
-import { Stats } from '../types/Database';
+import { Levels, Stats } from '../types/Database';
 import { Models, SteamLink } from '../types/Models';
 
 interface LoadMongoReturn extends Models {
@@ -20,22 +20,25 @@ async function loadSteamMongo(
     return { steamModel, steamClient };
 }
 
-async function loadStatsMongo(
+async function loadStatsAndLevelsMongo(
     config: Config['mainBot']['stats'],
-): Promise<Pick<LoadMongoReturn, 'statsModel' | 'statsClient'>> {
+): Promise<
+    Pick<LoadMongoReturn, 'statsModel' | 'levelsModel' | 'statsClient'>
+> {
     const statsClient = await new MongoClient(config.mongoURI).connect();
 
     const db = statsClient.db(config.mongoDbName);
 
     const statsModel = db.collection<Stats>('Stats');
+    const levelsModel = db.collection<Levels>('PlayerLevels');
 
-    return { statsModel, statsClient };
+    return { statsModel, levelsModel, statsClient };
 }
 
 export async function loadMongo(config: Config): Promise<LoadMongoReturn> {
     const [steamMongoData, statsMongoData] = await Promise.all([
         loadSteamMongo(config.steamLinking),
-        loadStatsMongo(config.mainBot.stats),
+        loadStatsAndLevelsMongo(config.mainBot.stats),
     ]);
 
     console.log('Connected to MongoDB');

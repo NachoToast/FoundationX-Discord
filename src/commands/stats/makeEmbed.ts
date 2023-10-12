@@ -1,6 +1,6 @@
 import { User, HexColorString, EmbedBuilder, APIEmbedField } from 'discord.js';
 import { CommandParams } from '../../types/Command';
-import { Stats } from '../../types/Database';
+import { Levels, Stats } from '../../types/Database';
 
 const formatDuration = (durationSeconds: number): string => {
     if (durationSeconds < 60) {
@@ -51,20 +51,31 @@ function makeField(
     };
 }
 
+// 76561199196151341
+
 export async function sendStats(
     interaction: CommandParams['interaction'],
     stats: Stats,
     context: User | string,
+    levelData: Levels | null,
     colour: HexColorString,
 ): Promise<void> {
+    const description = [
+        `Total Playtime **${formatDuration(stats.TotalPlaytime)}**`,
+        `Longest Session **${formatDuration(stats.LongestSession)}**`,
+    ];
+
+    if (levelData !== null) {
+        description.splice(
+            0,
+            0,
+            `Level **${levelData.LVL}** (${levelData.XP} XP)`,
+        );
+    }
+
     const embed = new EmbedBuilder()
         .setColor(colour)
-        .setDescription(
-            [
-                `Total Playtime **${formatDuration(stats.TotalPlaytime)}**`,
-                `Longest Session **${formatDuration(stats.LongestSession)}**`,
-            ].join('\n'),
-        );
+        .setDescription(description.join('\n'));
 
     if (typeof context === 'string') {
         embed
