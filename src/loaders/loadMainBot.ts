@@ -10,11 +10,7 @@ export async function loadMainBot(
     models: Models,
 ): Promise<Client<true>> {
     const client = new Client<true>({
-        intents: [
-            GatewayIntentBits.Guilds,
-            GatewayIntentBits.MessageContent,
-            GatewayIntentBits.GuildMessages,
-        ],
+        intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
     });
 
     await client.login(config.mainBot.discordBotToken);
