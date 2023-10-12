@@ -38,6 +38,5 @@ pm2 delete $processName --silent || true
 # Start a new process instance.
 echo "Starting new instance"
 # Trigger global slash command deploy.
-# https://expressjs.com/th/advanced/best-practice-performance.html#set-node_env-to-production
 export NODE_ENV=production
 pm2 start . --name $processName --silent
