@@ -19,7 +19,12 @@ export async function rootHandler(
     const code = url.searchParams.get('code');
 
     if (code !== null) {
-        const auth = await handleAuthCode(code, url.origin, config, res);
+        let redirectUri = url.origin;
+        if (config.steamLinking.oAuthUrl.startsWith('https')) {
+            redirectUri = redirectUri.replace('http://', 'https://');
+        }
+
+        const auth = await handleAuthCode(code, redirectUri, config, res);
         if (auth === null) return;
 
         const data = await handleAccessToken(auth.access_token, res);

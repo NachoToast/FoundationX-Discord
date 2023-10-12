@@ -23,6 +23,8 @@ export async function parseResponseError(
         errorData.push('No further data.');
     }
 
-    res.writeHead(502);
+    // 502 is the correct status code here, but Cloudflare likes to send their
+    // own file when the upstream server returns 502, which isn't very helpful.
+    res.writeHead(500);
     res.end(errorData.join('\n'));
 }
