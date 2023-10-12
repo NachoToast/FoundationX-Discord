@@ -83,7 +83,9 @@ async function handleInteraction(
             await sendFeedbackMessage(interaction, 'remove', role);
         } catch (error) {
             await interaction.reply({
-                content: `Failed to remove the role **${role.label}**`,
+                content: `Failed to remove the role **${role.label}** - ${
+                    error instanceof Error ? error.message : 'Unknown Error'
+                }`,
             });
         }
     } else {
@@ -93,7 +95,9 @@ async function handleInteraction(
             await sendFeedbackMessage(interaction, 'add', role);
         } catch (error) {
             await interaction.reply({
-                content: `Failed to add the role **${role.label}**`,
+                content: `Failed to add the role **${role.label}** - ${
+                    error instanceof Error ? error.message : 'Unknown Error'
+                }`,
             });
         }
     }
