@@ -1,0 +1,58 @@
+{
+    "embedColour": "#3f48cc",
+    "steamLinking": {
+        "port": 5000,
+        "mongoURI": "mongodb+srv://USERNAME:PASSWORD@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
+        "mongoDbName": "dev",
+        "discordClientId": "12345",
+        "discordClientSecret": "abcdefg",
+        "oAuthUrl": "https://discord.com/api/oauth2/authorize?client_id=12345&redirect_uri=http%3A%2F%2Flocalhost%3A5000&response_type=code&scope=identify%20connections"
+    },
+    "mainBot": {
+        "discordBotToken": "ABC.123",
+        "reactRoles": {
+            "guildId": "12345",
+            "channelId": "12345",
+            "0123456789": {
+                "label": "Minecraft",
+                "style": 0,
+                "emoji": "🎮",
+                "addMessage": "Welcome to the land of blocks!"
+            },
+            "1234567890": {
+                "label": "Tetris",
+                "style": 1,
+                "emoji": "🟩",
+                "removeMessage": "Those of the %s role are sad to see you go!"
+            },
+            "2345678901": {
+                "label": "Overwatch",
+                "style": 4,
+                "emoji": "💥",
+                "addMessage": "The world could **always** use more heroes!",
+                "removeMessage": "Dead game tbh"
+            }
+        },
+        "stats": {
+            "mongoURI": "mongodb+srv://USERNAME:PASSWORD@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
+            "mongoDbName": "FoundationX"
+        }
+    },
+    "cluster": [
+        {
+            "discordBotToken": "ABC.123",
+            "accountId": "012",
+            "apiKey": "012"
+        },
+        {
+            "discordBotToken": "DEF.456",
+            "accountId": "012",
+            "apiKey": "012"
+        },
+        {
+            "discordBotToken": "HIJ.789",
+            "accountId": "012",
+            "apiKey": "012"
+        }
+    ]
+}
