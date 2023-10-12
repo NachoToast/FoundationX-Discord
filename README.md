@@ -1,6 +1,6 @@
 # FoundationX-Discord
 
-Various Discord bots and related-functionality for the FoundationX [Discord server](https://discord.gg/FoundationX).
+Various Discord bots and related functionality for the [FoundationX](https://foundationxservers.com) server network.
 
 Main bot needs the `bot` and `applications.commands` scopes.
 
