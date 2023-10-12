@@ -1,4 +1,4 @@
-# FoundationX-Discord
+# FoundationX-Discord [![CI](https://github.com/NachoToast/FoundationX-Discord/actions/workflows/node.js.ci.yml/badge.svg)](https://github.com/NachoToast/FoundationX-Discord/actions/workflows/node.js.ci.yml) [![Deploy](https://github.com/NachoToast/FoundationX-Discord/actions/workflows/deploy.yml/badge.svg)](https://github.com/NachoToast/FoundationX-Discord/actions/workflows/deploy.yml)
 
 Various Discord bots and related functionality for the [FoundationX](https://foundationxservers.com) server network.
 
