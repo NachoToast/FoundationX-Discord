@@ -1,4 +1,4 @@
-import { ActivityType, Client } from 'discord.js';
+import { ActivityType, Client, PresenceStatusData } from 'discord.js';
 import { fetchServerStats } from '../cluster/fetchServerStats';
 import { Config } from '../types/Config';
 
@@ -18,9 +18,22 @@ async function clusterUpdate(
                             : 'Unknown Error',
                 },
             ],
-            status: 'idle',
+            status: 'dnd',
         });
     } else if (stats.online) {
+        let status: PresenceStatusData;
+        switch (stats.playersOnline) {
+            case 0:
+                status = 'idle';
+                break;
+            case stats.playerCap:
+                status = 'dnd';
+                break;
+            default:
+                status = 'online';
+                break;
+        }
+
         bot.user.setPresence({
             activities: [
                 {
@@ -28,7 +41,7 @@ async function clusterUpdate(
                     name: `${stats.playersOnline}/${stats.playerCap}`,
                 },
             ],
-            status: stats.playersOnline === stats.playerCap ? 'dnd' : 'online',
+            status,
         });
     } else {
         bot.user.setPresence({
@@ -38,7 +51,7 @@ async function clusterUpdate(
                     name: 'Offline',
                 },
             ],
-            status: 'idle',
+            status: 'invisible',
         });
     }
 }
