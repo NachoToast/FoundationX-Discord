@@ -1,4 +1,4 @@
-import { loadMongo, loadWebServer } from './loaders';
+import { loadCluster, loadMongo, loadWebServer } from './loaders';
 import { loadConfig } from './loaders/loadConfig';
 import { loadMainBot } from './loaders/loadMainBot';
 import { Colour } from './types/Utility';
@@ -11,6 +11,7 @@ async function main(): Promise<void> {
     await Promise.all([
         loadWebServer(config, models),
         loadMainBot(config, models),
+        loadCluster(config),
     ]);
 
     console.log(

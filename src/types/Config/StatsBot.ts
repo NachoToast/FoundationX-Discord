@@ -7,9 +7,5 @@ export interface StatsBot {
      */
     discordBotToken: Snowflake;
 
-    /** SCP: Secret Lab account ID for this server. */
-    accountId: string;
-
-    /** SCP: Secret Lab API key for this server. */
-    apiKey: string;
+    serverId: string;
 }
