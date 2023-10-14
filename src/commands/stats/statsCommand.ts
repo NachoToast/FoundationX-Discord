@@ -43,6 +43,22 @@ export const statsCommand: Command = {
         const steamId64 = interaction.options.getString('steam', false);
 
         if (steamId64 !== null) {
+            if (!/^[0-9]{1,}$/.test(steamId64)) {
+                const button = new ButtonBuilder({
+                    label: 'Find your SteamID64',
+                    style: ButtonStyle.Link,
+                    url: 'https://steamid.io/lookup/',
+                });
+                const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    button,
+                );
+                await interaction.reply({
+                    content: 'Steam ID64 please.',
+                    components: [row],
+                });
+                return;
+            }
+
             const [stats, levelData] = await Promise.all([
                 models.statsModel.findOne({ _id: steamId64 }),
                 models.levelsModel.findOne({ _id: `${steamId64}@steam` }),
