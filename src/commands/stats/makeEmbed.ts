@@ -41,17 +41,16 @@ function makeField(
     const rows = new Array<string>(data.length);
     for (let i = 0; i < data.length; i++) {
         const [name, num] = data[i];
-        rows[i] = `${histogram(num, maxValue)}\u1CBC\u1CBC${num.toString()}${
+        rows[i] = `${histogram(num, maxValue)} ${num.toString()}${
             x ? 'x' : ''
-        } ${name} (${percentage(num, total)})`;
+        } ${name}`;
+        if (total > 0) rows[i] += ` (${percentage(num, total)})`;
     }
     return {
         name: `${emoji} ${total} ${title}`,
         value: rows.join('\n'),
     };
 }
-
-// 76561199196151341
 
 export async function sendStats(
     interaction: CommandParams['interaction'],
