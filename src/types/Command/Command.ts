@@ -22,6 +22,10 @@ export interface Command {
             client,
             config,
             commands,
-        }: Pick<CommandParams, 'client' | 'config' | 'commands'>,
+            statsCollector,
+        }: Pick<
+            CommandParams,
+            'client' | 'config' | 'commands' | 'statsCollector'
+        >,
     ) => void;
 }

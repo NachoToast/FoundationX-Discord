@@ -1,3 +1,4 @@
+import { getSteamData } from '../getSteamData';
 import { RankedStat, Stats, StatsRanking } from '../types/Database';
 import { StatsModel } from '../types/Models';
 
@@ -8,12 +9,17 @@ interface StatsInsight {
     isLeaderboard: boolean;
 }
 
+type PlayerLeaderboardStat = {
+    id: string;
+    value: number;
+} & Awaited<ReturnType<typeof getSteamData>>;
+
 export class StatsCollector {
     private static readonly _updateIntervalMinutes = 60; // 1 hour
 
     private readonly _statsModel: StatsModel;
 
-    private readonly _stats: Map<RankedStat, StatsRanking>;
+    public readonly stats: Map<RankedStat, StatsRanking>;
 
     public constructor(statsModel: StatsModel) {
         this._statsModel = statsModel;
@@ -41,7 +47,7 @@ export class StatsCollector {
             ['TotalPlaytime', 'playtime'],
         ];
 
-        this._stats = new Map(
+        this.stats = new Map(
             stats.map<[RankedStat, StatsRanking]>((a) => [
                 a[0],
                 {
@@ -84,7 +90,7 @@ export class StatsCollector {
         const p95 = StatsCollector.empiricalQuartile(data, 0.95);
         const p99 = StatsCollector.empiricalQuartile(data, 0.99);
 
-        const existingStat = this._stats.get(name);
+        const existingStat = this.stats.get(name);
         if (existingStat === undefined) return;
 
         existingStat.top10 = rawData
@@ -100,7 +106,7 @@ export class StatsCollector {
     }
 
     private async updateAll(): Promise<void> {
-        for (const key of this._stats.keys()) {
+        for (const key of this.stats.keys()) {
             try {
                 // console.log(`Updating ${key}...`);
                 await this.updateSingle(key);
@@ -116,7 +122,7 @@ export class StatsCollector {
         statName: RankedStat,
         statValue: number,
     ): StatsInsight | null {
-        const rankingData = this._stats.get(statName);
+        const rankingData = this.stats.get(statName);
         if (rankingData === undefined) return null;
 
         const placement = rankingData.top10.indexOf(steamId);
@@ -191,7 +197,7 @@ export class StatsCollector {
         const outputA: StatsInsight[] = [];
         const outputB: StatsInsight[] = [];
 
-        for (const statName of this._stats.keys()) {
+        for (const statName of this.stats.keys()) {
             const statValue = stats[statName];
             const insight = this.getRankingForStat(
                 steamId,
@@ -215,28 +221,6 @@ export class StatsCollector {
         return combinedOutput
             .slice(0, Math.max(outputB.length, 5))
             .map((e) => e.description);
-    }
-
-    private static getOrdinal(n: number): string {
-        switch (n % 100) {
-            case 11:
-            case 12:
-            case 13:
-                return 'th';
-            default:
-                break;
-        }
-
-        switch (n % 10) {
-            case 1:
-                return 'st';
-            case 2:
-                return 'nd';
-            case 3:
-                return 'rd';
-            default:
-                return 'th';
-        }
     }
 
     private static clamp(x: number, min: number, max: number): number {
@@ -269,5 +253,27 @@ export class StatsCollector {
         const interpolation = rank - lowerIndex;
 
         return lowerValue + interpolation * (upperValue - lowerValue);
+    }
+
+    public async getTopXForStat(
+        stat: RankedStat,
+        limit: number = 10,
+    ): Promise<PlayerLeaderboardStat[]> {
+        const topX = await this._statsModel
+            .find({}, { limit, sort: { [stat]: 'desc' } })
+            .project<Stats>({ _id: 1, [stat]: 1 })
+            .toArray();
+
+        async function makeProfileLine(
+            id: string,
+            value: number,
+        ): Promise<PlayerLeaderboardStat> {
+            const profileData = await getSteamData(id);
+            return { id, value, ...profileData };
+        }
+
+        return await Promise.all(
+            topX.map((e) => makeProfileLine(e._id, e[stat])),
+        );
     }
 }

@@ -5,6 +5,7 @@ import {
     Routes,
     SlashCommandBuilder,
 } from 'discord.js';
+import { StatsCollector } from '../../statsCollector';
 import { Config } from '../../types/Config';
 import { Colour } from '../../types/Utility';
 import { commandMap } from './commandMap';
@@ -66,6 +67,7 @@ async function deployToAllGuilds(
 export async function deployCommands(
     client: Client<true>,
     config: Config,
+    statsCollector: StatsCollector,
 ): Promise<void> {
     const rest = new REST({ version: '10' }).setToken(
         config.mainBot.discordBotToken,
@@ -76,7 +78,12 @@ export async function deployCommands(
         const builtCommand = new SlashCommandBuilder()
             .setName(command.name)
             .setDescription(command.description);
-        command.build?.(builtCommand, { client, config, commands: commandMap });
+        command.build?.(builtCommand, {
+            client,
+            config,
+            commands: commandMap,
+            statsCollector,
+        });
         builtCommand.setDMPermission(false);
         return builtCommand.toJSON();
     });

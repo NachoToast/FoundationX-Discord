@@ -20,10 +20,15 @@ const percentage = (num: number, total: number): string => {
     return `${Math.round((num / total) * 100)}%`;
 };
 
-const histogram = (num: number, total: number, length = 5): string => {
+export const histogram = (
+    num: number,
+    total: number,
+    length = 5,
+    emptyChar = '⬛',
+): string => {
     const fillPart = Math.round((num / total) * length);
-    const filled = '🟦'.repeat(fillPart);
-    const empty = '⬛'.repeat(length - fillPart);
+    const filled = '<:histogram:1166693406769172531>'.repeat(fillPart);
+    const empty = emptyChar.repeat(length - fillPart);
 
     return filled + empty;
 };

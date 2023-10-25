@@ -27,7 +27,7 @@ export async function loadMainBot(
     });
 
     await Promise.all([
-        deployCommands(client, config),
+        deployCommands(client, config, statsCollector),
         setupReactRoles(client, config.mainBot.reactRoles),
     ]);
 
