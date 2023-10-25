@@ -168,7 +168,7 @@ export async function sendStats(
     if (insights.length > 0) {
         embed.addFields({
             name: `🌟 ${insights.length} Noteworthy Stat${
-                insights.length === 1 ? '' : ''
+                insights.length === 1 ? '' : 's'
             }`,
             value: insights.join('\n'),
             inline: true,
