@@ -20,7 +20,7 @@ export async function rootHandler(
 
     if (code !== null) {
         let redirectUri = url.origin;
-        if (config.steamLinking.oAuthUrl.startsWith('https')) {
+        if (config.production) {
             redirectUri = redirectUri.replace('http://', 'https://');
         }
 
