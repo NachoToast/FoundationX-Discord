@@ -1,6 +1,7 @@
-import { User, HexColorString, EmbedBuilder, APIEmbedField } from 'discord.js';
+import { HexColorString, EmbedBuilder, APIEmbedField } from 'discord.js';
 import { CommandParams } from '../../types/Command';
 import { Levels, Stats } from '../../types/Database';
+import { IContext } from './IContext';
 
 const formatDuration = (durationSeconds: number): string => {
     if (durationSeconds < 60) {
@@ -55,7 +56,7 @@ function makeField(
 export async function sendStats(
     interaction: CommandParams['interaction'],
     stats: Stats,
-    context: User | string,
+    context: IContext,
     levelData: Levels | null,
     colour: HexColorString,
     insights: string[],
@@ -77,22 +78,28 @@ export async function sendStats(
         .setColor(colour)
         .setDescription(description.join('\n'));
 
-    if (typeof context === 'string') {
-        embed
-            .setTitle(`Stats for ${context}`)
-            .setURL(`https://steamcommunity.com/profiles/${context}`);
+    if (context.type === 'steam') {
+        const { id, profileUrl, username } = context.user;
 
-        if (context === '76561199218191222') {
+        embed
+            .setTitle(`Stats for ${username ?? id}`)
+            .setURL(`https://steamcommunity.com/profiles/${id}`);
+
+        embed.setThumbnail(profileUrl ?? null);
+
+        if (id === '76561199218191222') {
             embed.setImage(
                 'https://miro.medium.com/v2/resize:fit:630/1*U_YWaNfECxoLRh0dmlpVOg.jpeg',
             );
         }
     } else {
-        embed
-            .setTitle(`Stats for ${context.displayName}`)
-            .setThumbnail(context.displayAvatarURL());
+        const { user } = context;
 
-        if (context.id === '826388910770487326') {
+        embed
+            .setTitle(`Stats for ${user.displayName}`)
+            .setThumbnail(user.displayAvatarURL());
+
+        if (user.id === '826388910770487326') {
             embed.setImage(
                 'https://miro.medium.com/v2/resize:fit:630/1*U_YWaNfECxoLRh0dmlpVOg.jpeg',
             );

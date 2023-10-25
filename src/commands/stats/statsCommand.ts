@@ -1,4 +1,5 @@
 import { ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
+import { getSteamData } from '../../getSteamData';
 import { Command } from '../../types/Command';
 import { sendStats } from './makeEmbed';
 import { sendNoStats } from './noStats';
@@ -59,14 +60,15 @@ export const statsCommand: Command = {
                 return;
             }
 
-            const [stats, levelData] = await Promise.all([
+            const [stats, levelData, profileData] = await Promise.all([
                 models.statsModel.findOne({ _id: steamId64 }),
                 models.levelsModel.findOne({ _id: `${steamId64}@steam` }),
+                getSteamData(steamId64),
             ]);
             if (stats === null) {
                 await sendNoStats(
                     interaction,
-                    steamId64,
+                    { type: 'steam', user: { id: steamId64, ...profileData } },
                     false,
                     config.embedColour,
                 );
@@ -79,7 +81,7 @@ export const statsCommand: Command = {
                 await sendStats(
                     interaction,
                     stats,
-                    steamId64,
+                    { type: 'steam', user: { id: steamId64, ...profileData } },
                     levelData,
                     config.embedColour,
                     statsInsights,
@@ -118,7 +120,7 @@ export const statsCommand: Command = {
         if (stats === null) {
             await sendNoStats(
                 interaction,
-                targetUser,
+                { type: 'user', user: targetUser },
                 false,
                 config.embedColour,
             );
@@ -131,7 +133,7 @@ export const statsCommand: Command = {
             await sendStats(
                 interaction,
                 stats,
-                targetUser,
+                { type: 'user', user: targetUser },
                 levelData,
                 config.embedColour,
                 statsInsights,

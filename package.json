@@ -22,7 +22,8 @@
     "dependencies": {
         "dayjs": "^1.11.10",
         "discord.js": "^14.13.0",
-        "mongodb": "^6.1.0"
+        "mongodb": "^6.1.0",
+        "node-html-parser": "^6.1.11"
     },
     "devDependencies": {
         "@types/node": "^20.8.4",
