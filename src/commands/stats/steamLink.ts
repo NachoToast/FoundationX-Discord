@@ -15,7 +15,8 @@ export async function sendLinkSteam(
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
     await interaction.reply({
-        content: 'You have not linked your Steam account.',
+        content:
+            'You have not linked your Steam account (alternatively, use your SteamID64).',
         components: [row],
     });
 }
