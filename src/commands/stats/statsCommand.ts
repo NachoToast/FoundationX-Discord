@@ -9,7 +9,7 @@ export const statsCommand: Command = {
 
     description: 'Gets in-game stats for SCP:SL',
 
-    async execute({ interaction, models, config }) {
+    async execute({ interaction, models, config, statsCollector }) {
         const check = !!interaction.options.getBoolean('check', false);
 
         if (check) {
@@ -71,12 +71,18 @@ export const statsCommand: Command = {
                     config.embedColour,
                 );
             } else {
+                const statsInsights = statsCollector.getRankingFor(
+                    steamId64,
+                    stats,
+                );
+
                 await sendStats(
                     interaction,
                     stats,
                     steamId64,
                     levelData,
                     config.embedColour,
+                    statsInsights,
                 );
             }
             return;
@@ -117,12 +123,18 @@ export const statsCommand: Command = {
                 config.embedColour,
             );
         } else {
+            const statsInsights = statsCollector.getRankingFor(
+                fetchedSteamData.steamId64,
+                stats,
+            );
+
             await sendStats(
                 interaction,
                 stats,
                 targetUser,
                 levelData,
                 config.embedColour,
+                statsInsights,
             );
         }
     },

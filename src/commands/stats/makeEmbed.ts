@@ -58,6 +58,7 @@ export async function sendStats(
     context: User | string,
     levelData: Levels | null,
     colour: HexColorString,
+    insights: string[],
 ): Promise<void> {
     const description = [
         `Total Playtime **${formatDuration(stats.TotalPlaytime)}**`,
@@ -160,8 +161,19 @@ export async function sendStats(
                 `${stats.CasesUnlocked} Cases Unlocked`,
                 `${stats.DoorsTouched} Doors Used`,
             ].join('\n'),
+            inline: true,
         },
     ]);
+
+    if (insights.length > 0) {
+        embed.addFields({
+            name: `🌟 ${insights.length} Noteworthy Stat${
+                insights.length === 1 ? '' : ''
+            }`,
+            value: insights.join('\n'),
+            inline: true,
+        });
+    }
 
     await interaction.reply({ embeds: [embed] });
 }

@@ -1,6 +1,7 @@
 import { loadCluster, loadMongo, loadWebServer } from './loaders';
 import { loadConfig } from './loaders/loadConfig';
 import { loadMainBot } from './loaders/loadMainBot';
+import { StatsCollector } from './statsCollector';
 import { Colour } from './types/Utility';
 
 async function main(): Promise<void> {
@@ -8,9 +9,11 @@ async function main(): Promise<void> {
 
     const models = await loadMongo(config);
 
+    const statsCollector = new StatsCollector(models.statsModel);
+
     await Promise.all([
         loadWebServer(config, models),
-        loadMainBot(config, models),
+        loadMainBot(config, models, statsCollector),
         loadCluster(config),
     ]);
 

@@ -1,6 +1,7 @@
 import { ActivityType, Client, GatewayIntentBits } from 'discord.js';
 import { deployCommands, registerCommandHandlers } from '../commands';
 import { setupReactRoles } from '../reactRoles';
+import { StatsCollector } from '../statsCollector';
 import { Config } from '../types/Config';
 import { Models } from '../types/Models';
 import { Colour } from '../types/Utility';
@@ -8,6 +9,7 @@ import { Colour } from '../types/Utility';
 export async function loadMainBot(
     config: Config,
     models: Models,
+    statsCollector: StatsCollector,
 ): Promise<Client<true>> {
     const client = new Client<true>({
         intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -29,7 +31,7 @@ export async function loadMainBot(
         setupReactRoles(client, config.mainBot.reactRoles),
     ]);
 
-    registerCommandHandlers(client, models, config);
+    registerCommandHandlers(client, models, config, statsCollector);
 
     return client;
 }

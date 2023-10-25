@@ -1,4 +1,5 @@
 import { Client, Events, GuildMember } from 'discord.js';
+import { StatsCollector } from '../../statsCollector';
 import { Config } from '../../types/Config';
 import { Models } from '../../types/Models';
 import { Colour } from '../../types/Utility';
@@ -8,6 +9,7 @@ export function registerCommandHandlers(
     client: Client<true>,
     models: Models,
     config: Config,
+    statsCollector: StatsCollector,
 ): void {
     client.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isCommand()) return;
@@ -49,6 +51,7 @@ export function registerCommandHandlers(
                 models,
                 config,
                 commands: commandMap,
+                statsCollector,
             });
         } catch (error) {
             if (!config.production) console.log(error);

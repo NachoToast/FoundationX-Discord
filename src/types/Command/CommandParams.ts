@@ -4,6 +4,7 @@ import {
     GuildTextBasedChannel,
     GuildMember,
 } from 'discord.js';
+import { StatsCollector } from '../../statsCollector';
 import { Config } from '../Config';
 import { Models } from '../Models';
 import { Command } from './Command';
@@ -22,4 +23,6 @@ export interface CommandParams {
     config: Config;
 
     commands: Map<string, Command>;
+
+    statsCollector: StatsCollector;
 }
