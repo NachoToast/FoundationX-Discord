@@ -2,7 +2,7 @@ import { EmbedBuilder } from 'discord.js';
 import { Command } from '../types/Command';
 import { RankedStat, Stats } from '../types/Database';
 import { StatsModel } from '../types/Models';
-import { histogram } from './stats/makeEmbed';
+import { formatDuration, histogram } from './stats/makeEmbed';
 
 function capitalizeEachWord(s: string): string {
     return s
@@ -77,6 +77,11 @@ export const topCommand: Command = {
             return;
         }
 
+        let valueFormatter = (x: number): string => x.toString();
+        if (stat === 'TotalPlaytime' || stat === 'LongestSession') {
+            valueFormatter = (x: number) => formatDuration(x);
+        }
+
         const embed = new EmbedBuilder()
             .setColor(config.embedColour)
             .setTitle(
@@ -93,11 +98,14 @@ export const topCommand: Command = {
 
         for (let i = 0; i < leaderboard.length; i++) {
             const { username, id, value } = leaderboard[i];
+
             output[i] = `${histogram(value, maxValue, 10, '')} ${
                 medals.next().value
             } [${
                 username ?? id
-            }](https://steamcommunity.com/profiles/${id}) - ${value}`;
+            }](https://steamcommunity.com/profiles/${id}) - ${valueFormatter(
+                value,
+            )}`;
         }
 
         if (steamLink === null) {
@@ -130,7 +138,7 @@ export const topCommand: Command = {
                         member.displayName
                     }](https://steamcommunity.com/profiles/${
                         steamLink.steamId64
-                    }) - ${rankData.value}`,
+                    }) - ${valueFormatter(rankData.value)}`,
                 );
             }
         }
