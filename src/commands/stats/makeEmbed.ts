@@ -91,24 +91,18 @@ export async function sendStats(
             .setURL(`https://steamcommunity.com/profiles/${id}`);
 
         embed.setThumbnail(profileUrl ?? null);
-
-        if (id === '76561199218191222') {
-            embed.setImage(
-                'https://miro.medium.com/v2/resize:fit:630/1*U_YWaNfECxoLRh0dmlpVOg.jpeg',
-            );
-        }
     } else {
         const { user } = context;
 
         embed
             .setTitle(`Stats for ${user.displayName}`)
             .setThumbnail(user.displayAvatarURL());
+    }
 
-        if (user.id === '826388910770487326') {
-            embed.setImage(
-                'https://miro.medium.com/v2/resize:fit:630/1*U_YWaNfECxoLRh0dmlpVOg.jpeg',
-            );
-        }
+    if (insights.length > 5) {
+        embed.setImage(
+            'https://miro.medium.com/v2/resize:fit:630/1*U_YWaNfECxoLRh0dmlpVOg.jpeg',
+        );
     }
 
     const totalKills = stats.KillsAgainstPlayers + stats.KillsAgaisntSCPs;
