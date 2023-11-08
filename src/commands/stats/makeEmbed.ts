@@ -3,7 +3,7 @@ import { CommandParams } from '../../types/Command';
 import { Levels, Stats } from '../../types/Database';
 import { IContext } from './IContext';
 
-const formatDuration = (durationSeconds: number): string => {
+export const formatDuration = (durationSeconds: number): string => {
     if (durationSeconds < 60) {
         return `${durationSeconds}s`;
     }
