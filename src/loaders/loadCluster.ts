@@ -34,15 +34,27 @@ async function clusterUpdate(
                 break;
         }
 
-        bot.user.setPresence({
-            activities: [
-                {
-                    type: ActivityType.Watching,
-                    name: `${stats.playersOnline}/${stats.playerCap}`,
-                },
-            ],
-            status,
-        });
+        if (status === 'idle' && Math.random() < 0.05) {
+            bot.user.setPresence({
+                activities: [
+                    {
+                        type: ActivityType.Playing,
+                        name: 'among us',
+                    },
+                ],
+                status,
+            });
+        } else {
+            bot.user.setPresence({
+                activities: [
+                    {
+                        type: ActivityType.Watching,
+                        name: `${stats.playersOnline}/${stats.playerCap}`,
+                    },
+                ],
+                status,
+            });
+        }
     } else {
         bot.user.setPresence({
             activities: [
@@ -77,6 +89,4 @@ export async function loadCluster(config: Config): Promise<void> {
             1000 * 60,
         );
     }
-
-    await fetchServerStats(config.cluster[0].serverId);
 }
