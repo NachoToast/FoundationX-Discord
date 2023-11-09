@@ -2,6 +2,34 @@ import { ActivityType, Client, PresenceStatusData } from 'discord.js';
 import { fetchServerStats } from '../cluster/fetchServerStats';
 import { Config } from '../types/Config';
 
+function chooseRandomGame(): string {
+    const games: string[] = [
+        'among us',
+        'fortnite',
+        'minecraft',
+        'roblox',
+        'overwatch',
+        'barotrauma',
+        'age of empires II',
+        'crab game',
+        'frostpunk',
+        'rust',
+        'unturned',
+        'outer wilds',
+        'terraria',
+        'factorio',
+        'town of salem',
+        'league of legends',
+        'dead by daylight',
+        'destiny 2',
+        'EVE online',
+        'cybperunk 2077',
+        'cities: skylines',
+    ];
+
+    return games[Math.floor(Math.random() * games.length)];
+}
+
 async function clusterUpdate(
     bot: Client<true>,
     serverId: string,
@@ -39,7 +67,7 @@ async function clusterUpdate(
                 activities: [
                     {
                         type: ActivityType.Playing,
-                        name: 'among us',
+                        name: chooseRandomGame(),
                     },
                 ],
                 status,
