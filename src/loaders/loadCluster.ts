@@ -2,31 +2,44 @@ import { ActivityType, Client, PresenceStatusData } from 'discord.js';
 import { fetchServerStats } from '../cluster/fetchServerStats';
 import { Config } from '../types/Config';
 
-function chooseRandomGame(): string {
-    const games: string[] = [
-        'among us',
-        'fortnite',
-        'minecraft',
-        'roblox',
-        'overwatch',
-        'barotrauma',
-        'age of empires II',
-        'crab game',
-        'frostpunk',
-        'rust',
-        'unturned',
-        'outer wilds',
-        'terraria',
-        'factorio',
-        'town of salem',
-        'league of legends',
-        'dead by daylight',
-        'destiny 2',
-        'EVE online',
-        'cybperunk 2077',
-        'cities: skylines',
-    ];
+const games: string[] = [
+    'among us',
+    'fortnite',
+    'minecraft',
+    'roblox',
+    'overwatch',
+    'barotrauma',
+    'age of empires II',
+    'crab game',
+    'frostpunk',
+    'rust',
+    'unturned',
+    'outer wilds',
+    'terraria',
+    'factorio',
+    'town of salem',
+    'league of legends',
+    'dead by daylight',
+    'destiny 2',
+    'EVE online',
+    'cybperunk 2077',
+    'cities: skylines',
+    'rimworld',
+    'prison architect',
+    'stardew valley',
+    'EVE online',
+    'VR chat',
+    'fall guys',
+    'rocket league',
+    'portal 2',
+    'team fortress 2',
+    'hollow knight',
+    'skyrim',
+    'stellaris',
+    'elden ring',
+];
 
+function chooseRandomGame(): string {
     return games[Math.floor(Math.random() * games.length)];
 }
 
@@ -62,7 +75,7 @@ async function clusterUpdate(
                 break;
         }
 
-        if (status === 'idle' && Math.random() < 0.05) {
+        if (status === 'idle' && Math.random() < 0.1) {
             bot.user.setPresence({
                 activities: [
                     {
