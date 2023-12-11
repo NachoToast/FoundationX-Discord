@@ -7,7 +7,7 @@ const games: string[] = [
     'fortnite',
     'minecraft',
     'roblox',
-    'overwatch',
+    'overwatch 2',
     'barotrauma',
     'age of empires II',
     'crab game',
@@ -37,6 +37,7 @@ const games: string[] = [
     'skyrim',
     'stellaris',
     'elden ring',
+    'lethal company',
 ];
 
 function chooseRandomGame(): string {
