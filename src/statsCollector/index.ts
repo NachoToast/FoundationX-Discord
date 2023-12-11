@@ -40,6 +40,7 @@ export class StatsCollector {
             ['MedkitsUsed', 'medkits used'],
             ['PainkillersUsed', 'painkillers eaten'],
             ['CasesUnlocked', 'cases unlocked'],
+            ['ColasEaten', 'SCP-207 drank'],
             ['PepsisEaten', "SCP-207?'s drank"],
             ['HatsWorn', "SCP-268's worn"],
             ['DoorsTouched', 'doors used'],
