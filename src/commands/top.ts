@@ -108,6 +108,19 @@ export const topCommand: Command = {
             )}`;
         }
 
+        if (
+            stat === 'DeathsToTesla' &&
+            ['1000257933587775509', '240312568273436674'].includes(member.id)
+        ) {
+            const barWidth = leaderboard.at(0)?.value ?? 1;
+
+            output.splice(
+                0,
+                0,
+                `${histogram(barWidth, maxValue, 10, '')} 🏅 Jxyn - Infinity`,
+            );
+        }
+
         if (steamLink === null) {
             embed.setFooter({
                 text: `Check your individual ranking for ${
