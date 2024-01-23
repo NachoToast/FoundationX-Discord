@@ -86,7 +86,7 @@ async function clusterUpdate(
                 break;
         }
 
-        if (status === 'idle' && Math.random() < 0.1) {
+        if (status === 'idle' && Math.random() < 0.15) {
             bot.user.setPresence({
                 activities: [
                     {
