@@ -17,11 +17,11 @@ type PlayerLeaderboardStat = {
 export class StatsCollector {
     private static readonly _updateIntervalMinutes = 60; // 1 hour
 
-    private readonly _statsModel: StatsModel;
+    private readonly _statsModel?: StatsModel;
 
     public readonly stats: Map<RankedStat, StatsRanking>;
 
-    public constructor(statsModel: StatsModel) {
+    public constructor(statsModel?: StatsModel) {
         this._statsModel = statsModel;
 
         const stats: [RankedStat, string][] = [
@@ -73,6 +73,8 @@ export class StatsCollector {
     }
 
     private async updateSingle(name: RankedStat): Promise<void> {
+        if (this._statsModel === undefined) return;
+
         const cursor = this._statsModel
             .find()
             .project<Stats>({ _id: 1, [name]: 1 })
@@ -102,8 +104,6 @@ export class StatsCollector {
         existingStat.p90 = p90;
         existingStat.p95 = p95;
         existingStat.p99 = p99;
-
-        return;
     }
 
     private async updateAll(): Promise<void> {
@@ -260,6 +260,10 @@ export class StatsCollector {
         stat: RankedStat,
         limit: number = 10,
     ): Promise<PlayerLeaderboardStat[]> {
+        if (this._statsModel === undefined) {
+            return [];
+        }
+
         const topX = await this._statsModel
             .find({}, { limit, sort: { [stat]: 'desc' } })
             .project<Stats>({ _id: 1, [stat]: 1 })

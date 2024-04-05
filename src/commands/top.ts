@@ -128,6 +128,11 @@ export const topCommand: Command = {
                 } by linking your Steam account using /stats!`,
                 iconURL: client.user.displayAvatarURL(),
             });
+        } else if (models.statsModel === undefined) {
+            embed.setFooter({
+                text: 'Not connected to the stats database, so unable to fetch rankings',
+                iconURL: interaction.user.displayAvatarURL(),
+            });
         } else {
             const rankData = await getRank(
                 models.statsModel,

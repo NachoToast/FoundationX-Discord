@@ -10,6 +10,6 @@ export type LevelsModel = Collection<Levels>;
 
 export interface Models {
     steamModel: SteamModel;
-    levelsModel: LevelsModel;
-    statsModel: StatsModel;
+    levelsModel?: LevelsModel;
+    statsModel?: StatsModel;
 }

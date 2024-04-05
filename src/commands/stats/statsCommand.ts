@@ -11,6 +11,22 @@ export const statsCommand: Command = {
     description: 'Gets in-game stats for SCP:SL',
 
     async execute({ interaction, models, config, statsCollector }) {
+        if (models.statsModel === undefined) {
+            await interaction.reply({
+                content: 'Not connected to the stats database',
+                ephemeral: true,
+            });
+            return;
+        }
+
+        if (models.levelsModel === undefined) {
+            await interaction.reply({
+                content: 'Not connected to the levels database',
+                ephemeral: true,
+            });
+            return;
+        }
+
         const check = !!interaction.options.getBoolean('check', false);
 
         if (check) {
