@@ -72,5 +72,11 @@
         "uri": "mongodb+srv://<username>:<password>@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
         "dbName": "v2",
         "connectTimeout": 10
+    },
+    "serverStats": {
+        "expectedUpdateInterval": 30,
+        "servers": {
+            "123456": "some secure string"
+        }
     }
 }

@@ -146,5 +146,11 @@ export function loadConfig(): Config {
             connectTimeout.integer().min(0);
         });
 
+    validate('serverStats', ['object'])
+        .child('expectedUpdateInterval', ['number'], (updateInterval) => {
+            updateInterval.min(1).finite();
+        })
+        .child('servers', ['object'], (servers) => servers.values(['string']));
+
     return parsedConfig;
 }

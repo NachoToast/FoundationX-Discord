@@ -1,6 +1,7 @@
 import { HexColorString, Snowflake } from 'discord.js';
 import { ClusterBot } from './ClusterBot.js';
 import { ReactRole } from './ReactRole.js';
+import { ServerStatsConfig } from './ServerStatsConfig.js';
 
 /** Expected values from the `.env` file. */
 export interface Config {
@@ -107,4 +108,6 @@ export interface Config {
          */
         connectTimeout: number;
     };
+
+    serverStats: ServerStatsConfig;
 }

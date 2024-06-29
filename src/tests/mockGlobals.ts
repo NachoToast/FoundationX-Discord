@@ -32,6 +32,10 @@ const mockedConfig: Config = {
         dbName: '',
         connectTimeout: 0,
     },
+    serverStats: {
+        expectedUpdateInterval: 1,
+        servers: {},
+    },
 };
 
 export function mockGlobals(): void {
