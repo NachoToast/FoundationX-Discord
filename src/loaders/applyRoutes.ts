@@ -1,4 +1,9 @@
-import { getIp, getRoot } from '../routes/index.js';
+import {
+    getIp,
+    getRoot,
+    getServerStats,
+    postServerStats,
+} from '../routes/index.js';
 
 export function applyRoutes(): void {
     const { app } = AppGlobals;
@@ -6,4 +11,8 @@ export function applyRoutes(): void {
     // Miscellaneous
     app.get('/', getRoot);
     app.get('/ip', getIp);
+
+    // Server Stats
+    app.get('/server-stats/:id', getServerStats);
+    app.post('/server-stats/:id', postServerStats);
 }
