@@ -26,5 +26,5 @@ jobs:
                       git reset --hard --quiet
                       git clean -d --force --quiet
                       git pull --quiet
-                  #   docker compose up --build --detach
-                  #   docker image prune --force
+                      docker compose up --build --detach
+                      docker image prune --force
