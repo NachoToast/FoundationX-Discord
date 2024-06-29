@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1
+# https://docs.docker.com/reference/dockerfile/
+
+ARG NODE_VERSION=20.12.1
+ARG PNPM_VERSION=9.4.0
+
+# Install Node
+FROM node:${NODE_VERSION}-alpine
+
+# Install pnpm 
+RUN --mount=type=cache,target=/root/.npm \
+    npm install -g pnpm@${PNPM_VERSION}
+
+# Copy files, setup CWD and user
+WORKDIR /home/toasty
+COPY . .
+RUN chown -R node /home/toasty
+USER node
+
+# Install all dependencies and build
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile
+
+RUN pnpm run build
+
+# Install production dependencies
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --prod --frozen-lockfile
+
+ENV NODE_ENV=production
+
+CMD pnpm start

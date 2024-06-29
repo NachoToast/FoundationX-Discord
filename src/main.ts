@@ -1,25 +1,17 @@
-import { loadCluster, loadMongo, loadWebServer } from './loaders';
-import { loadConfig } from './loaders/loadConfig';
-import { loadMainBot } from './loaders/loadMainBot';
-import { StatsCollector } from './statsCollector';
-import { Colour } from './types/Utility';
+import { loadAll } from './loaders/index.js';
 
-async function main(): Promise<void> {
-    const config = loadConfig();
+Object.keysT = Object.keys;
+Object.entriesT = Object.entries;
+Object.fromEntriesT = Object.fromEntries;
 
-    const models = await loadMongo(config);
+process.on('uncaughtException', (error) => {
+    console.log('Uncaught exception:', error);
+    process.exit(1);
+});
 
-    const statsCollector = new StatsCollector(models.statsModel);
+process.on('unhandledRejection', (error) => {
+    console.log('Unhandled rejection:', error);
+    process.exit(1);
+});
 
-    await Promise.all([
-        loadWebServer(config, models),
-        loadMainBot(config, models, statsCollector),
-        loadCluster(config),
-    ]);
-
-    console.log(
-        `${Colour.FgGreen}Setup everything successfully!${Colour.Reset}`,
-    );
-}
-
-void main();
+await loadAll();

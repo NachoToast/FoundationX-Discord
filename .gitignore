@@ -1,16 +1,16 @@
-# dependencies
+# https://git-scm.com/docs/gitignore
+
+# Dependencies
 node_modules/
 
-# package managers
+# Package Managers
 package-lock.json
 yarn.lock
 .yarn-integrity
 
-# IDEs and editors
-.vscode/settings.json
-
-# user generated
-data/
+# User Generated
 build/
+coverage/
 *.log
 config.json
+data/latestCommandDeploy.json

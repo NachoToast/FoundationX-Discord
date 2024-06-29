@@ -1,0 +1,8 @@
+{
+    "eslint.useFlatConfig": true,
+    "eslint.workingDirectories": ["server", "website"],
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
+    }
+}

@@ -1,0 +1,196 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "FoundationX API",
+        "description": "Official web API for the FoundationX server network.",
+        "contact": {
+            "name": "NachoToast",
+            "url": "https://github.com/NachoToast",
+            "email": "32235595+NachoToast@users.noreply.github.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/LICENSE"
+        },
+        "version": "2.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:{port}",
+            "description": "Development Server",
+            "variables": {
+                "port": {
+                    "default": "5000"
+                }
+            }
+        },
+        {
+            "url": "https://api.foundationxservers.com",
+            "description": "Production Server"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "operationId": "getRoot",
+                "responses": {
+                    "200": {
+                        "description": "Basic response message.",
+                        "content": {
+                            "text/html": {
+                                "example": "You found the FoundationX API!"
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
+        "/ip": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "operationId": "getIp",
+                "description": "IP address information endpoint, used for debugging proxies.",
+                "externalDocs": {
+                    "url": "https://express-rate-limit.mintlify.app/guides/troubleshooting-proxy-issues",
+                    "description": "Troubleshooting proxy issues with express-rate-limit."
+                },
+                "responses": {
+                    "200": {
+                        "description": "IP address of request, may be `::` if viewing from the same network.",
+                        "content": {
+                            "text/html": {
+                                "example": "123.123.123.123"
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
+        "/spec": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "responses": {
+                    "200": {
+                        "description": "OpenAPI specification for the FoundationX API.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api-docs": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "responses": {
+                    "200": {
+                        "description": "This document.",
+                        "content": {
+                            "text/html": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SiteErrorObject": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/src/types/Express/SiteErrorObject.ts",
+                    "description": "src/types/Express/SiteErrorObject.ts"
+                },
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": ["title", "description"]
+            }
+        },
+        "responses": {
+            "BadRequestError400": {
+                "description": "Error thrown when a request is malformed or otherwise an invalid shape. This can also be thrown when a request's origin header is present and not in the allowed origins whitelist (CORS error).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/src/middleware/validatorErrorHandler.ts",
+                                "description": "src/middleware/validatorErrorHandler.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ],
+                            "properties": {
+                                "additionalData": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "path": {
+                                                "type": "string",
+                                                "example": "/refresh"
+                                            },
+                                            "message": {
+                                                "type": "string",
+                                                "example": "Authorization header with scheme 'Bearer' required"
+                                            },
+                                            "error_code": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": ["path", "message"],
+                                        "additionalProperties": false
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "RateLimited429": {
+                "description": "Too many requests, rate limited.",
+                "headers": {
+                    "RateLimit": {
+                        "required": true,
+                        "description": "Information about the rate limit that was exceeded.",
+                        "schema": {
+                            "type": "string",
+                            "externalDocs": {
+                                "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-ratelimit-headers-07#name-ratelimit",
+                                "description": "IETF rate limit header specification (draft 7)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [],
+    "tags": [
+        {
+            "name": "Miscellaneous",
+            "description": "Miscellaneous functionality."
+        }
+    ]
+}

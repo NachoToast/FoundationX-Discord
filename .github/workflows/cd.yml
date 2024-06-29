@@ -1,0 +1,30 @@
+name: CD
+
+on:
+    workflow_run:
+        workflows: [CI]
+        types: [completed]
+        branches: [main]
+
+jobs:
+    production-deploy:
+        name: Deploy to Production
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        concurrency: deploy
+
+        steps:
+            - name: Execute deploy script
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  password: ${{ secrets.PASSWORD }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd services_v2/FoundationX-Discord
+                      git reset --hard --quiet
+                      git clean -d --force --quiet
+                      git pull --quiet
+                  #   docker compose up --build --detach
+                  #   docker image prune --force

@@ -1,58 +1,76 @@
 {
-    "embedColour": "#3f48cc",
-    "steamLinking": {
-        "port": 5000,
-        "mongoURI": "mongodb+srv://USERNAME:PASSWORD@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
-        "mongoDbName": "dev",
-        "discordClientId": "12345",
-        "discordClientSecret": "abcdefg",
-        "oAuthUrl": "https://discord.com/api/oauth2/authorize?client_id=12345&redirect_uri=http%3A%2F%2Flocalhost%3A5000&response_type=code&scope=identify%20connections"
-    },
+    "production": false,
+    "developerUserId": "240312568273436674",
     "mainBot": {
-        "discordBotToken": "ABC.123",
+        "embedColour": "#3f48cc",
+        "token": "abcdefg",
+        "loginTimeout": 10,
+        "deployTimeout": 10,
         "reactRoles": {
-            "guildId": "12345",
-            "channelId": "12345",
-            "0123456789": {
-                "label": "Minecraft",
-                "style": 0,
-                "emoji": "🎮",
-                "addMessage": "Welcome to the land of blocks!"
-            },
-            "1234567890": {
-                "label": "Tetris",
-                "style": 1,
-                "emoji": "🟩",
-                "removeMessage": "Those of the %s role are sad to see you go!"
-            },
-            "2345678901": {
-                "label": "Overwatch",
-                "style": 4,
-                "emoji": "💥",
-                "addMessage": "The world could **always** use more heroes!",
-                "removeMessage": "Dead game tbh"
+            "guildId": "1256029842571530262",
+            "channelId": "1256029842571530265",
+            "roles": {
+                "1256029952025956382": {
+                    "label": "SCP:SL",
+                    "style": 4,
+                    "emoji": "👻",
+                    "addMessage": "Welcome to the foundation!"
+                },
+                "1256029959684620339": {
+                    "label": "Minecraft",
+                    "style": 3,
+                    "emoji": "🟩"
+                },
+                "1256029960225951885": {
+                    "label": "Rust",
+                    "style": 4,
+                    "emoji": "☢"
+                },
+                "1256030054115446858": {
+                    "label": "Updates",
+                    "style": 1,
+                    "emoji": "📆"
+                },
+                "1256030054706712586": {
+                    "label": "Game Night",
+                    "style": 2,
+                    "emoji": "🏆",
+                    "addMessage": "You now have the **%s** role, look forward to Crab Game 🦀"
+                }
             }
-        },
-        "stats": {
-            "mongoURI": "mongodb+srv://USERNAME:PASSWORD@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
-            "mongoDbName": "FoundationX"
         }
     },
-    "cluster": [
-        {
-            "discordBotToken": "ABC.123",
-            "accountId": "012",
-            "apiKey": "012"
-        },
-        {
-            "discordBotToken": "DEF.456",
-            "accountId": "012",
-            "apiKey": "012"
-        },
-        {
-            "discordBotToken": "HIJ.789",
-            "accountId": "012",
-            "apiKey": "012"
-        }
-    ]
+    "cluster": {
+        "updateInterval": 60,
+        "loginTimeout": 10,
+        "bots": [
+            {
+                "token": "abcdefg",
+                "serverId": "70248"
+            },
+            {
+                "token": "abcdefg",
+                "serverId": "70108"
+            },
+            {
+                "token": "abcdefg",
+                "serverId": "70249"
+            },
+            {
+                "token": "abcdefg",
+                "serverId": "72054"
+            }
+        ]
+    },
+    "webApi": {
+        "port": 5000,
+        "clientUrls": ["*"],
+        "rateLimit": 60,
+        "proxyCount": 0
+    },
+    "mongoDb": {
+        "uri": "mongodb+srv://<username>:<password>@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
+        "dbName": "v2",
+        "connectTimeout": 10
+    }
 }

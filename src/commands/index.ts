@@ -1,2 +1,3 @@
-export * from './meta/deployCommands';
-export * from './meta/registerCommandHandlers';
+import { statusCommand } from './status.js';
+
+export const allCommands = [statusCommand];

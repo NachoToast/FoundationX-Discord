@@ -1,9 +1,6 @@
-import dayjs, { extend } from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { Command } from '../types/Command';
-import { Colour } from '../types/Utility';
+import { SlashCommand } from '../types/index.js';
+import { relativeTime } from '../util/relativeTime.js';
 
-extend(relativeTime);
 function pingHint(ping: number): string {
     if (ping < 500) return 'good';
     if (ping < 1000) return 'ok';
@@ -12,32 +9,30 @@ function pingHint(ping: number): string {
     return 'oh god';
 }
 
-export const statusCommand: Command = {
+export const statusCommand: SlashCommand = {
     name: 'status',
-    description: "Sends information about the bot's status",
-    async execute({ client, interaction, config }) {
+    description: "Get information about the bot's status",
+    async onInvoke({ interaction }) {
+        const { client, startTime, commit } = AppGlobals;
+
         const ping = Math.abs(Date.now() - interaction.createdTimestamp);
         const apiLatency = Math.round(client.ws.ping);
-        const uptime = dayjs(client.readyAt).fromNow(true);
-        const memory = process.memoryUsage().heapUsed / 1024 ** 2;
+        const started = startTime.getTime();
+        const memory = Math.ceil(process.memoryUsage().heapUsed / 1024 ** 2);
 
         const output: string[] = [
-            `${Colour.Bright}FoundationX Discord Bot${Colour.Reset}`,
-            `Version: ${Colour.FgMagenta}${config.commit.slice(0, 7)}${
-                Colour.Reset
-            }`,
-            `Uptime: ${Colour.FgGreen}${
-                uptime[0].toUpperCase() + uptime.slice(1)
-            }${Colour.Reset}`,
-            `Latency: ${Colour.FgYellow}${ping}ms (${pingHint(ping)})${
-                Colour.Reset
-            }`,
-            `API Latency: ${Colour.FgBlue}${apiLatency}ms${Colour.Reset}`,
-            `Memory: ${Colour.FgCyan}${Math.ceil(memory)}${Colour.Reset} MB`,
+            `**FoundationX Discord Bot**`,
+            `Version: *unknown*`,
+            `Started: ${relativeTime(started)}`,
+            `Latency: ${ping.toLocaleString()}ms (${pingHint(ping)})`,
+            `API Latency: ${apiLatency.toLocaleString()}ms`,
+            `Memory: ${memory.toLocaleString()} MB`,
         ];
 
-        await interaction.reply({
-            content: '> ```ansi\n> ' + output.join('\n> ') + '\n> ```',
-        });
+        if (commit !== null) {
+            output[1] = `Version: [${commit.slice(0, 7)}](<https://github.com/NachoToast/FoundationX-Discord/commit/${commit}>)`;
+        }
+
+        await interaction.reply(output.join('\n> '));
     },
 };
