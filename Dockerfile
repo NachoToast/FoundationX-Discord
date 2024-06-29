@@ -12,9 +12,9 @@ RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
 
 # Copy files, setup CWD and user
-WORKDIR /home/toasty
+WORKDIR /home/foundationx-api
 COPY . .
-RUN chown -R node /home/toasty
+RUN chown -R node /home/foundationx-api
 USER node
 
 # Install all dependencies and build
