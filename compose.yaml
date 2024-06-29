@@ -1,8 +1,11 @@
 # https://docs.docker.com/compose/compose-file/
-name: foundationx-api
+name: foundationx
 services:
-    bot:
+    api:
         build: .
-        restart: on-failure:5
-        # mem_limit: 200mb
-        # mem_reservation: 100mb
+        env_file: .env
+        ports:
+            - ${PORTS}
+        restart: ${RESTART_POLICY}
+        mem_limit: ${HARD_MEMORY_LIMIT}
+        mem_reservation: ${SOFT_MEMORY_LIMIT}

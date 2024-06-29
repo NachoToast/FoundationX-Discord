@@ -12,5 +12,6 @@ yarn.lock
 build/
 coverage/
 *.log
+.env
 config.json
 data/latestCommandDeploy.json

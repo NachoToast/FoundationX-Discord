@@ -1,0 +1,11 @@
+# https://docs.docker.com/go/build-context-dockerignore/
+
+*
+
+!data
+!src
+!config.json
+!package.json
+!pnpm-lock.yaml
+!tsconfig.json
+!tsconfig.build.json
