@@ -1,4 +1,5 @@
 import {
+    getAllServerStats,
     getIp,
     getRoot,
     getServerStats,
@@ -15,4 +16,5 @@ export function applyRoutes(): void {
     // Server Stats
     app.get('/server-stats/:id', getServerStats);
     app.post('/server-stats/:id', postServerStats);
+    app.get('/server-stats', getAllServerStats);
 }

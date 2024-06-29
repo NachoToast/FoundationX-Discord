@@ -182,10 +182,59 @@
                     }
                 }
             }
+        },
+        "/server-stats": {
+            "get": {
+                "tags": ["Server Stats"],
+                "operationId": "getAllServerStats",
+                "description": "Fetches a list of all server stats as well as all server IDs tracked by the API.",
+                "responses": {
+                    "200": {
+                        "description": "List of server IDs and their stats.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "serverId": {
+                                                "type": "string"
+                                            },
+                                            "stats": {
+                                                "anyOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/Null"
+                                                    },
+                                                    {
+                                                        "$ref": "#/components/schemas/OutServerStats"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "required": ["serverId", "stats"],
+                                        "additionalProperties": false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "Null": {
+                "title": "null",
+                "enum": [null]
+            },
             "SiteErrorObject": {
                 "type": "object",
                 "externalDocs": {
