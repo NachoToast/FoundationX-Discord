@@ -246,39 +246,61 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "type": "object",
-                            "externalDocs": {
-                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/middleware/validatorErrorHandler.ts",
-                                "description": "src/middleware/validatorErrorHandler.ts"
-                            },
-                            "allOf": [
+                            "anyOf": [
                                 {
-                                    "$ref": "#/components/schemas/SiteErrorObject"
-                                }
-                            ],
-                            "properties": {
-                                "additionalData": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "path": {
-                                                "type": "string",
-                                                "example": "/refresh"
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                                "example": "Authorization header with scheme 'Bearer' required"
-                                            },
-                                            "error_code": {
-                                                "type": "string"
+                                    "type": "object",
+                                    "externalDocs": {
+                                        "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/middleware/validatorErrorHandler.ts",
+                                        "description": "src/middleware/validatorErrorHandler.ts"
+                                    },
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SiteErrorObject"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "additionalData": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "path": {
+                                                        "type": "string",
+                                                        "example": "/refresh"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Authorization header with scheme 'Bearer' required"
+                                                    },
+                                                    "error_code": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": ["path", "message"],
+                                                "additionalProperties": false
                                             }
-                                        },
-                                        "required": ["path", "message"],
-                                        "additionalProperties": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "externalDocs": {
+                                        "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/classes/CorsError.ts",
+                                        "description": "src/classes/CorsError.ts"
+                                    },
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SiteErrorObject"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "additionalData": {
+                                            "type": "string",
+                                            "description": "The origin header value that resulted in the error."
+                                        }
                                     }
                                 }
-                            }
+                            ]
                         }
                     }
                 }
