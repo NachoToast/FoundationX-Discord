@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { Colour, JSONValue } from '../src/types/index.js';
 
-const pathToCheck = '/NachoToast/FoundationX-Discord/blob/';
+const pathToCheck = '/NachoToast/FoundationX-API/blob/';
 
 const stats = {
     skipped: 0,

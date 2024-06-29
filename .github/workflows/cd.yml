@@ -22,7 +22,7 @@ jobs:
                   password: ${{ secrets.PASSWORD }}
                   port: ${{ secrets.PORT }}
                   script: |
-                      cd services_v2/FoundationX-Discord
+                      cd services_v2/FoundationX-API
                       git reset --hard --quiet
                       git clean -d --force --quiet
                       git pull --quiet

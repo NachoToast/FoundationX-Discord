@@ -30,7 +30,7 @@ export const statusCommand: SlashCommand = {
         ];
 
         if (commit !== null) {
-            output[1] = `Version: [${commit.slice(0, 7)}](<https://github.com/NachoToast/FoundationX-Discord/commit/${commit}>)`;
+            output[1] = `Version: [${commit.slice(0, 7)}](<https://github.com/NachoToast/FoundationX-API/commit/${commit}>)`;
         }
 
         await interaction.reply(output.join('\n> '));
