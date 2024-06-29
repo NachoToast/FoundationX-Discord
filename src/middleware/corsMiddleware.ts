@@ -12,7 +12,7 @@ export function makeOriginFunction(
         if (origin === undefined || clientUrls.has(origin)) {
             callback(null, true);
         } else {
-            callback(new CorsError());
+            callback(new CorsError(origin));
         }
     };
 }
