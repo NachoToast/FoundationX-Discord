@@ -10,7 +10,7 @@
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/LICENSE"
+            "url": "https://github.com/NachoToast/FoundationX-API/blob/main/LICENSE"
         },
         "version": "2.0.0"
     },
@@ -104,6 +104,84 @@
                     }
                 }
             }
+        },
+        "/server-stats/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/serverId"
+                }
+            ],
+            "get": {
+                "tags": ["Server Stats"],
+                "operationId": "getServerStats",
+                "responses": {
+                    "200": {
+                        "description": "Server stats object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OutServerStats"
+                                }
+                            }
+                        }
+                    },
+                    "202": {
+                        "description": "Edge-case where the server is tracked by this API, but it's stats have not yet been populated."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError404"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Server Stats"],
+                "operationId": "updateServerStats",
+                "security": [
+                    {
+                        "statsAuthToken": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InServerStats"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated server stats object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OutServerStats"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError404"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -111,7 +189,7 @@
             "SiteErrorObject": {
                 "type": "object",
                 "externalDocs": {
-                    "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/src/types/Express/SiteErrorObject.ts",
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/types/Express/SiteErrorObject.ts",
                     "description": "src/types/Express/SiteErrorObject.ts"
                 },
                 "properties": {
@@ -123,6 +201,43 @@
                     }
                 },
                 "required": ["title", "description"]
+            },
+            "OutServerStats": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/src/types/ServerStats/ServerStats.ts",
+                    "description": "src/types/ServerStats/ServerStats.ts"
+                },
+                "properties": {
+                    "reportedAt": {
+                        "type": "integer"
+                    },
+                    "playerCount": {
+                        "type": "integer"
+                    },
+                    "playerCap": {
+                        "type": "integer"
+                    }
+                },
+                "required": ["reportedAt", "playerCount", "playerCap"],
+                "additionalProperties": false
+            },
+            "InServerStats": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/src/types/ServerStats/ServerStats.ts",
+                    "description": "src/types/ServerStats/ServerStats.ts"
+                },
+                "properties": {
+                    "playerCount": {
+                        "type": "integer"
+                    },
+                    "playerCap": {
+                        "type": "integer"
+                    }
+                },
+                "required": ["playerCount", "playerCap"],
+                "additionalProperties": false
             }
         },
         "responses": {
@@ -133,7 +248,7 @@
                         "schema": {
                             "type": "object",
                             "externalDocs": {
-                                "url": "https://github.com/NachoToast/FoundationX-Discord/blob/main/src/middleware/validatorErrorHandler.ts",
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/middleware/validatorErrorHandler.ts",
                                 "description": "src/middleware/validatorErrorHandler.ts"
                             },
                             "allOf": [
@@ -168,6 +283,44 @@
                     }
                 }
             },
+            "AuthError401": {
+                "description": "Error thrown when a request is made with insufficient or malformed credentials, such as having an invalid auth token.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/classes/AuthError.ts",
+                                "description": "src/classes/AuthError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "NotFoundError404": {
+                "description": "Error thrown when a requested item could not be found.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/classes/NotFoundError.ts",
+                                "description": "src/classes/NotFoundError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "RateLimited429": {
                 "description": "Too many requests, rate limited.",
                 "headers": {
@@ -184,13 +337,36 @@
                     }
                 }
             }
+        },
+        "parameters": {
+            "serverId": {
+                "in": "path",
+                "name": "id",
+                "schema": {
+                    "type": "string",
+                    "description": "Secret Lab server ID.",
+                    "example": "123456"
+                },
+                "required": true
+            }
+        },
+        "securitySchemes": {
+            "statsAuthToken": {
+                "type": "apiKey",
+                "description": "Authorization token for updating server stats.",
+                "name": "Authorization",
+                "in": "header"
+            }
         }
     },
-    "security": [],
     "tags": [
         {
             "name": "Miscellaneous",
             "description": "Miscellaneous functionality."
+        },
+        {
+            "name": "Server Stats",
+            "description": "Fetching and updating reported SL server stats."
         }
     ]
 }
