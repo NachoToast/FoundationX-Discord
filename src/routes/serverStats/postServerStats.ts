@@ -12,7 +12,7 @@ export const postServerStats: Endpoint<
 
     const serverId = req.params.id;
 
-    const expectedAuthToken = servers[serverId];
+    const expectedAuthToken = servers[serverId]?.authToken;
 
     if (expectedAuthToken === undefined) {
         throw new NotFoundError(

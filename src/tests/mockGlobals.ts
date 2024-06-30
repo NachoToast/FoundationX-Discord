@@ -16,11 +16,6 @@ const mockedConfig: Config = {
             roles: {},
         },
     },
-    cluster: {
-        updateInterval: 1,
-        loginTimeout: 0,
-        bots: [],
-    },
     webApi: {
         port: 0,
         clientUrls: [],
@@ -34,6 +29,7 @@ const mockedConfig: Config = {
     },
     serverStats: {
         expectedUpdateInterval: 1,
+        loginTimeout: 0,
         servers: {},
     },
 };

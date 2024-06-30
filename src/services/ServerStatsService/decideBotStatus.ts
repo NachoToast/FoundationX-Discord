@@ -1,37 +1,37 @@
 import { ActivityType, PresenceData, PresenceStatusData } from 'discord.js';
+import { OutServerStats } from '../../types/index.js';
 import { chooseRandomGame } from './chooseRandomGame.js';
-import { ServerStats } from './types/ServerStats.js';
 
 const IDLE_GAME_CHANCE = 0.15;
 
-export function decideBotStatus(stats: ServerStats): PresenceData {
-    if (stats.online === 'ERROR') {
-        // If the API errored (or gave us an invalid response), show the
-        // relevant error code.
-        return {
-            activities: [
-                {
-                    type: ActivityType.Watching,
-                    name: `Error ${stats.code}`,
-                },
-            ],
-            status: 'dnd',
-        };
+const BUFFER_SECONDS = 10;
+
+const OFFLINE_STATE: PresenceData = {
+    activities: [{ type: ActivityType.Watching, name: 'Offline' }],
+    status: 'invisible',
+};
+
+export function decideBotStatus(stats: OutServerStats | null): PresenceData {
+    if (stats === null) {
+        return OFFLINE_STATE;
     }
 
-    if (!stats.online) {
-        // If the server is offline, become invisible.
-        return {
-            activities: [{ type: ActivityType.Watching, name: 'Offline' }],
-            status: 'invisible',
-        };
+    /** Seconds since last reported. */
+    const timeSinceReport = Math.floor((Date.now() - stats.reportedAt) / 1_000);
+
+    if (
+        timeSinceReport >
+        AppGlobals.config.serverStats.expectedUpdateInterval + BUFFER_SECONDS
+    ) {
+        // If the server hasn't reported in a while, show as offline.
+        return OFFLINE_STATE;
     }
 
     // Otherwise the server is online.
 
     let status: PresenceStatusData;
 
-    switch (stats.playersOnline) {
+    switch (stats.playerCount) {
         case 0:
             status = 'idle'; // An empty server shows as idle.
             break;
@@ -58,7 +58,7 @@ export function decideBotStatus(stats: ServerStats): PresenceData {
         activities: [
             {
                 type: ActivityType.Watching,
-                name: `${stats.playersOnline.toString()}/${stats.playerCap.toString()}`,
+                name: `${stats.playerCount.toString()}/${stats.playerCap.toString()}`,
             },
         ],
         status,

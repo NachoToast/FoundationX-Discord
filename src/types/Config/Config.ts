@@ -1,5 +1,4 @@
 import { HexColorString, Snowflake } from 'discord.js';
-import { ClusterBot } from './ClusterBot.js';
 import { ReactRole } from './ReactRole.js';
 import { ServerStatsConfig } from './ServerStatsConfig.js';
 
@@ -43,21 +42,6 @@ export interface Config {
 
             roles: Record<Snowflake, ReactRole>;
         };
-    };
-
-    cluster: {
-        /** Stats refetch interval in seconds. */
-        updateInterval: number;
-
-        /**
-         * Time in seconds to wait for the bot to login before throwing an
-         * error.
-         *
-         * Set to 0 for no timeout.
-         */
-        loginTimeout: number;
-
-        bots: ClusterBot[];
     };
 
     webApi: {

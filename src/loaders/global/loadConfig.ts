@@ -97,21 +97,6 @@ export function loadConfig(): Config {
                 });
         });
 
-    validate('cluster', ['object'])
-        .child('updateInterval', ['number'], (updateInterval) => {
-            updateInterval.min(1).finite();
-        })
-        .child('loginTimeout', ['number'], (loginTimeout) => {
-            loginTimeout.integer().min(0);
-        })
-        .child('bots', ['array'], (bots) => {
-            bots.forEach(['object'], (clusterBot) => {
-                clusterBot
-                    .child('token', ['string'])
-                    .child('serverId', ['string']);
-            });
-        });
-
     validate('webApi', ['object'])
         .child('port', ['number'], (port) => port.integer().min(0).max(65535))
         .child('clientUrls', ['array'], (clientUrls) => {
@@ -150,7 +135,16 @@ export function loadConfig(): Config {
         .child('expectedUpdateInterval', ['number'], (updateInterval) => {
             updateInterval.min(1).finite();
         })
-        .child('servers', ['object'], (servers) => servers.values(['string']));
+        .child('loginTimeout', ['number'], (loginTimeout) => {
+            loginTimeout.integer().min(0);
+        })
+        .child('servers', ['object'], (servers) =>
+            servers.values(['object'], (server) => {
+                server
+                    .child('authToken', ['string'])
+                    .child('discordToken', ['string']);
+            }),
+        );
 
     return parsedConfig;
 }
