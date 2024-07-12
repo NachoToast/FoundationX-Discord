@@ -28,6 +28,7 @@ export async function startServer(): Promise<void> {
                 `Listening on ${Colour.FgCyan}${reportedLocation}${Colour.Reset}`,
                 startTime,
             );
+
             resolve();
         });
     });

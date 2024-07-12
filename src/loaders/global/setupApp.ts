@@ -18,5 +18,8 @@ export function setupApp(config: Config): Express {
         );
     }
 
+    app.use('/static', express.static('static'));
+    app.use('/favicon.ico', express.static('static/favicon.ico'));
+
     return app;
 }

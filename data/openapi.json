@@ -105,6 +105,19 @@
                 }
             }
         },
+        "/static": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "responses": {
+                    "200": {
+                        "description": "List of static routes.",
+                        "content": {
+                            "text/html": {}
+                        }
+                    }
+                }
+            }
+        },
         "/server-stats/{id}": {
             "parameters": [
                 {
