@@ -76,7 +76,18 @@
     "serverStats": {
         "expectedUpdateInterval": 30,
         "servers": {
-            "123456": "some secure string"
+            "70248": {
+                "authToken": "some secure string",
+                "discordToken": "abcdefg"
+            },
+            "70108": {
+                "authToken": "some secure string",
+                "discordToken": "abcdefg"
+            }
         }
+    },
+    "discordOAuth": {
+        "clientId": "1156811935354994712",
+        "clientSecret": "K017xTgg2aDRelUhm2QLPbVYbQ8Ru03x"
     }
 }

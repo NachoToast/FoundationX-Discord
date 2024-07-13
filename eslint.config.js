@@ -27,14 +27,12 @@ export default tseslint.config(
             // Suggestions (https://eslint.org/docs/latest/rules/#suggestions)
 
             "camelcase": "off",                          // Better type-aware naming rules are below.
-            "class-methods-use-this": "off",             // Better type-aware class rules are below.
             "default-case-last": "error",                // Default cases should always be last.
             "eqeqeq": "error",                           // Strict equal (===) is much more predictable.
             "no-var": "error",                           // Use let or const instead, var is never needed.
 
             // TypeScript Specific (https://typescript-eslint.io/rules/?=xstrict-xstylistic-xdeprecated)
 
-            "@typescript-eslint/class-methods-use-this": "error",           // If a class method can be static, it should be.
             "@typescript-eslint/explicit-function-return-type": "error",    // Explicit returns are more readable.
             "@typescript-eslint/explicit-member-accessibility": "error",    // Public methods should be explicit.
             "@typescript-eslint/member-ordering": "error",                  // Consistenty of class members is nice.

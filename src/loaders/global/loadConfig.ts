@@ -146,5 +146,11 @@ export function loadConfig(): Config {
             }),
         );
 
+    validate('discordOAuth', ['object'])
+        .child('clientId', ['string'], (clientId) => clientId.min(1))
+        .child('clientSecret', ['string'], (clientSecret) => {
+            clientSecret.min(1);
+        });
+
     return parsedConfig;
 }
