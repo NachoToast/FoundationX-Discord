@@ -32,6 +32,10 @@ const mockedConfig: Config = {
         loginTimeout: 0,
         servers: {},
     },
+    discordAuth: {
+        clientId: '',
+        clientSecret: '',
+    },
 };
 
 export function mockGlobals(): void {

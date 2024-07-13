@@ -94,4 +94,10 @@ export interface Config {
     };
 
     serverStats: ServerStatsConfig;
+
+    discordAuth: {
+        clientId: string;
+
+        clientSecret: string;
+    };
 }
