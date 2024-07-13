@@ -118,6 +118,118 @@
                 }
             }
         },
+        "/login": {
+            "post": {
+                "tags": ["Auth"],
+                "operationId": "postLogin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "redirectUri": {
+                                        "type": "string",
+                                        "example": "http://localhost:5000/static/discordOAuth"
+                                    }
+                                },
+                                "required": ["code", "redirectUri"],
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginOrSignupResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenError403"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    },
+                    "502": {
+                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    }
+                }
+            }
+        },
+        "/refresh": {
+            "post": {
+                "tags": ["Auth"],
+                "security": [{ "siteToken": [] }],
+                "operationId": "postRefresh",
+                "responses": {
+                    "200": {
+                        "description": "Successful refresh response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginOrSignupResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenError403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError404"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    },
+                    "502": {
+                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": ["Auth"],
+                "security": [{ "siteToken": [] }],
+                "operationId": "postLogout",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    },
+                    "502": {
+                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    }
+                }
+            }
+        },
         "/server-stats/{id}": {
             "parameters": [
                 {
@@ -244,9 +356,153 @@
     },
     "components": {
         "schemas": {
-            "Null": {
-                "title": "null",
-                "enum": [null]
+            "LoginOrSignupResponse": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/types/Auth/LoginOrSignupResponse.ts",
+                    "description": "src/types/Auth/LoginOrSignupResponse.ts"
+                },
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "discordAuth": {
+                        "type": "object",
+                        "externalDocs": {
+                            "url": "https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-response",
+                            "description": "Discord OAuth2 Docs"
+                        },
+                        "properties": {
+                            "access_token": {
+                                "type": "string"
+                            },
+                            "token_type": {
+                                "type": "string",
+                                "description": "The type of token provided (Bearer)."
+                            },
+                            "expires_in": {
+                                "type": "integer",
+                                "description": "The number of seconds until the token expires."
+                            },
+                            "refresh_token": {
+                                "type": "string"
+                            },
+                            "scope": {
+                                "type": "string",
+                                "description": "The scopes that were granted to the application by the user."
+                            }
+                        },
+                        "required": [
+                            "access_token",
+                            "token_type",
+                            "expires_in",
+                            "refresh_token",
+                            "scope"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "siteAuth": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SiteTokenPayload": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/types/Auth/SiteTokenPayload.ts",
+                    "description": "src/types/Auth/SiteTokenPayload.ts"
+                },
+                "properties": {
+                    "steamId64": {
+                        "type": "string"
+                    },
+                    "discordId": {
+                        "type": "string"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "steamId64",
+                    "discordId",
+                    "accessToken",
+                    "refreshToken"
+                ],
+                "additionalProperties": false
+            },
+            "User": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/types/User/User.ts",
+                    "description": "src/types/User/User.ts"
+                },
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "discord": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "username": {
+                                "type": "string"
+                            },
+                            "avatar": {
+                                "type": "string",
+                                "nullable": true
+                            }
+                        },
+                        "required": ["id", "username", "avatar"],
+                        "additionalProperties": false
+                    },
+                    "economy": {
+                        "type": "object",
+                        "properties": {
+                            "balance": {
+                                "type": "integer"
+                            },
+                            "lifetimeBalance": {
+                                "type": "integer"
+                            },
+                            "lifetimePurchaseCount": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "balance",
+                            "lifetimeBalance",
+                            "lifetimePurchaseCount"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "latestIp": {
+                                "type": "string"
+                            },
+                            "firstSeenAt": {
+                                "type": "integer"
+                            },
+                            "lastSeenAt": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": ["firstSeenAt", "lastSeenAt"],
+                        "additionalProperties": false
+                    }
+                },
+                "required": ["_id", "username", "discord", "economy", "meta"],
+                "additionalProperties": false
             },
             "SiteErrorObject": {
                 "type": "object",
@@ -300,6 +556,11 @@
                 },
                 "required": ["playerCount", "playerCap"],
                 "additionalProperties": false
+            },
+            "Null": {
+                "title": "null",
+                "description": "Stand-in for `null` type.",
+                "enum": [null]
             }
         },
         "responses": {
@@ -386,6 +647,25 @@
                     }
                 }
             },
+            "ForbiddenError403": {
+                "description": "Error thrown when a request cannot be completed due to an invalid state or other factor unrelated to the direct client input.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/classes/NotFoundError.ts",
+                                "description": "src/classes/NotFoundError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "NotFoundError404": {
                 "description": "Error thrown when a requested item could not be found.",
                 "content": {
@@ -420,6 +700,32 @@
                         }
                     }
                 }
+            },
+            "SecondaryRequestError502": {
+                "description": "Error thrown when an API call made by the server to another server fails.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/FoundationX-API/blob/main/src/classes/SecondaryRequestError.ts",
+                                "description": "src/classes/SecondaryRequestError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ],
+                            "properties": {
+                                "additionalData": {
+                                    "type": "string",
+                                    "nullable": true
+                                }
+                            },
+                            "required": ["additionalData"]
+                        }
+                    }
+                }
             }
         },
         "parameters": {
@@ -440,6 +746,12 @@
                 "description": "Authorization token for updating server stats.",
                 "name": "Authorization",
                 "in": "header"
+            },
+            "siteToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "JWT signed by the server, contains Discord access token, refresh token, Discord user ID, and SteamID64."
             }
         }
     },
@@ -451,6 +763,10 @@
         {
             "name": "Server Stats",
             "description": "Fetching and updating reported SL server stats."
+        },
+        {
+            "name": "Auth",
+            "description": "Logging in, logging out, and refreshing."
         }
     ]
 }

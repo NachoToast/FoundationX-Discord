@@ -18,7 +18,7 @@ export function setupApp(config: Config): Express {
         );
     }
 
-    app.use('/static', express.static('static'));
+    app.use('/static', express.static('static', { extensions: ['html'] }));
     app.use('/favicon.ico', express.static('static/favicon.ico'));
 
     return app;

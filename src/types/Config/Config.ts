@@ -76,6 +76,8 @@ export interface Config {
          * https://express-rate-limit.mintlify.app/guides/troubleshooting-proxy-issues
          */
         proxyCount: number;
+
+        jwtSecret: string;
     };
 
     mongoDb: {
@@ -99,5 +101,7 @@ export interface Config {
         clientId: string;
 
         clientSecret: string;
+
+        redirectUri: string;
     };
 }

@@ -21,6 +21,7 @@ const mockedConfig: Config = {
         clientUrls: [],
         rateLimit: 0,
         proxyCount: 0,
+        jwtSecret: '',
     },
     mongoDb: {
         uri: '',
@@ -35,6 +36,7 @@ const mockedConfig: Config = {
     discordAuth: {
         clientId: '',
         clientSecret: '',
+        redirectUri: '',
     },
 };
 

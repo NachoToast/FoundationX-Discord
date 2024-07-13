@@ -3,11 +3,19 @@ import {
     getIp,
     getRoot,
     getServerStats,
+    postLogin,
+    postLogout,
+    postRefresh,
     postServerStats,
 } from '../routes/index.js';
 
 export function applyRoutes(): void {
     const { app } = AppGlobals;
+
+    // Auth
+    app.post('/login', postLogin);
+    app.post('/logout', postLogout);
+    app.post('/refresh', postRefresh);
 
     // Miscellaneous
     app.get('/', getRoot);

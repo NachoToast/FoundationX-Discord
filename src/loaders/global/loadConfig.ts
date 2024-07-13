@@ -122,7 +122,8 @@ export function loadConfig(): Config {
         })
         .child('proxyCount', ['number'], (proxyCount) => {
             proxyCount.integer().min(0);
-        });
+        })
+        .child('jwtSecret', ['string'], (jwtSecret) => jwtSecret.min(1));
 
     validate('mongoDb', ['object'])
         .child('uri', ['string'])
@@ -150,6 +151,9 @@ export function loadConfig(): Config {
         .child('clientId', ['string'], (clientId) => clientId.min(1))
         .child('clientSecret', ['string'], (clientSecret) => {
             clientSecret.min(1);
+        })
+        .child('redirectUri', ['string'], (redirectUri) => {
+            redirectUri.custom((x) => new URL(x)); // Throws if invalid.
         });
 
     return parsedConfig;

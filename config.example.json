@@ -66,7 +66,8 @@
         "port": 5000,
         "clientUrls": ["*"],
         "rateLimit": 60,
-        "proxyCount": 0
+        "proxyCount": 0,
+        "jwtSecret": "some super secret string"
     },
     "mongoDb": {
         "uri": "mongodb+srv://<username>:<password>@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
@@ -88,6 +89,7 @@
     },
     "discordAuth": {
         "clientId": "1156811935354994712",
-        "clientSecret": "K017xTgg2aDRelUhm2QLPbVYbQ8Ru03x"
+        "clientSecret": "your client secret",
+        "redirectUri": "http://localhost:5000/static/discordOAuth"
     }
 }
