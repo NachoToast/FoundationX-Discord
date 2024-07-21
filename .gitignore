@@ -11,7 +11,9 @@ yarn.lock
 # User Generated
 build/
 coverage/
+data/
+
 *.log
 .env
-config.json
-data/latestCommandDeploy.json
+config*.json
+!config.example.json

@@ -1,7 +1,5 @@
-import { Client } from 'discord.js';
-import { Express } from 'express';
 import { Db } from 'mongodb';
-import { Config } from './types/index.ts';
+import { Config } from './global/types/Config.ts';
 
 declare global {
     declare interface Error {
@@ -24,17 +22,10 @@ declare global {
 
     // eslint-disable-next-line no-var
     var AppGlobals: {
-        readonly client: Client<true>;
-
         readonly config: Config;
-
-        readonly app: Express;
 
         readonly db: Db;
 
         readonly startTime: Date;
-
-        /** Current commit hash. */
-        readonly commit: string | null;
     };
 }

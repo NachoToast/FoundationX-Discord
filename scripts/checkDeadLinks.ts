@@ -1,6 +1,16 @@
+/* Checks for misconfigured links in the OpenAPI spec. */
+
 import { existsSync, readFileSync } from 'fs';
-import { join, resolve } from 'path';
-import { Colour, JSONValue } from '../src/types/index.js';
+import { resolve } from 'path';
+import { Colour } from '../src/global/types/Colour.js';
+
+type JSONValue =
+    | string
+    | number
+    | boolean
+    | null
+    | { [x: string]: JSONValue }
+    | JSONValue[];
 
 const pathToCheck = '/NachoToast/FoundationX-API/blob/';
 
@@ -88,7 +98,32 @@ function recursivelyCheckKeys(obj: JSONValue): void {
             obj['description'] === undefined)
     ) {
         checkUrl(obj['url'], obj['description']);
-        return;
+    }
+
+    if (
+        typeof obj['description'] === 'string' &&
+        typeof obj['operationId'] === 'string'
+    ) {
+        for (const maybeUrl of obj['description'].split(/\(|\)/)) {
+            try {
+                const parsedUrl = new URL(maybeUrl);
+                if (!parsedUrl.pathname.startsWith(pathToCheck)) continue;
+
+                checkUrl(maybeUrl);
+                if (!maybeUrl.includes(obj['operationId'])) {
+                    stats.mismatchedDescription += 1;
+                    console.log(
+                        `URL description doesn't match operationId:\n\t${Colour.FgRed}${maybeUrl}${
+                            Colour.Reset
+                        }\n\t${
+                            Colour.FgCyan
+                        }${obj['operationId']}${Colour.Reset}`,
+                    );
+                }
+            } catch {
+                //
+            }
+        }
     }
 
     for (const key of Object.keys(obj)) {
@@ -100,28 +135,26 @@ function recursivelyCheckKeys(obj: JSONValue): void {
 }
 
 recursivelyCheckKeys(
-    JSON.parse(
-        readFileSync(join('data', 'openapi.json'), 'utf-8'),
-    ) as JSONValue,
+    JSON.parse(readFileSync('openapi.json', 'utf-8')) as JSONValue,
 );
 
 const totalChecked = Object.values(stats).reduce((a, b) => a + b, 0);
 
 console.log(
     `\nChecked ${Colour.Bright}${totalChecked.toString()}${Colour.Reset} URLs:\n${[
-        `${stats.skipped.toString()} Skipped`,
-        `${stats.invalid ? Colour.FgRed : Colour.FgGreen}${stats.invalid.toString()}${
+        `${stats.skipped.toString().padEnd(2, ' ')} Skipped`,
+        `${stats.external.toString().padEnd(2, ' ')} External`,
+        `${stats.invalid ? Colour.FgRed : Colour.FgGreen}${stats.invalid.toString().padEnd(2, ' ')}${
             Colour.Reset
         } Invalid`,
-        `${stats.external.toString()} External`,
-        `${stats.notMain ? Colour.FgRed : Colour.FgGreen}${stats.notMain.toString()}${
+        `${stats.notMain ? Colour.FgRed : Colour.FgGreen}${stats.notMain.toString().padEnd(2, ' ')}${
             Colour.Reset
         } Not Main Branch`,
-        `${stats.mismatchedDescription ? Colour.FgRed : Colour.FgGreen}${stats.mismatchedDescription.toString()}${Colour.Reset} Mismatched Description`,
-        `${stats.dead ? Colour.FgRed : Colour.FgGreen}${stats.dead.toString()}${
+        `${stats.mismatchedDescription ? Colour.FgRed : Colour.FgGreen}${stats.mismatchedDescription.toString().padEnd(2, ' ')}${Colour.Reset} Mismatched Description`,
+        `${stats.dead ? Colour.FgRed : Colour.FgGreen}${stats.dead.toString().padEnd(2, ' ')}${
             Colour.Reset
         } Dead Link`,
-        `${Colour.FgGreen}${stats.ok.toString()}${Colour.Reset} OK`,
+        `${Colour.FgGreen}${stats.ok.toString().padEnd(2, ' ')}${Colour.Reset} OK`,
     ].join('\n')}`,
 );
 

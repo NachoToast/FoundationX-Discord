@@ -52,6 +52,27 @@ export default tseslint.config(
                     // Same with enums.
                     "selector": "enumMember",
                     "format": ["PascalCase"],
+                },
+                {
+                    // Some values that require quotes, such as HTTP headers, don't follow the default rules.
+                    "selector": [
+                        "classProperty",
+                        "objectLiteralProperty",
+                        "typeProperty",
+                        "classMethod",
+                        "objectLiteralMethod",
+                        "typeMethod",
+                        "accessor",
+                        "enumMember",
+                    ],
+                    "format": null,
+                    "modifiers": ["requiresQuotes"],
+                },
+                {
+                    // Destructured properties don't need to follow the default rules.
+                    "selector": "variable",
+                    "modifiers": ["destructured"],
+                    "format": null,
                 }
             ],
             "@typescript-eslint/prefer-readonly": "error",                  // Immutability is always preferred.

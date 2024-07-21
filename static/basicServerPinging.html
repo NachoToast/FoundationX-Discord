@@ -10,30 +10,57 @@
         <h1 id="rtt">RTT: 0ms</h1>
         <p id="to">To Server: 0ms</p>
         <p id="from">From Server: 0ms</p>
+        <p id="r-limit">Rate Limit: 0 / 0 (resets in 0 seconds)</p>
+        <p id="http-code">HTTP 0</p>
+
         <script>
             const rtt = document.querySelector('#rtt');
             const to = document.querySelector('#to');
             const from = document.querySelector('#from');
+            const rateLimit = document.querySelector('#r-limit');
+            const httpCode = document.querySelector('#http-code');
+
+            function parseRateLimitHeader(rawValue) {
+                const parsed = new URLSearchParams(
+                    rawValue.split(',').map((e) => {
+                        const [key, value] = e.trim().split('=');
+                        return [key, value];
+                    }),
+                );
+
+                const limit = Number(parsed.get('limit'));
+                const remaining = Number(parsed.get('remaining'));
+                const resetsIn = Number(parsed.get('reset'));
+
+                rateLimit.innerText = `Rate Limit: ${remaining} / ${limit} (resets in ${resetsIn} seconds)`;
+            }
 
             async function getPing() {
                 const sentAt = Date.now();
 
-                const req = await (
-                    await fetch('http://localhost:5000', { method: 'POST' })
-                ).json();
+                const res = await fetch('http://localhost:5000', {
+                    method: 'POST',
+                });
 
-                const serverReceivedAt = new Date(
-                    req.receivedRequest,
-                ).getTime();
+                httpCode.innerText = `HTTP ${res.status} (${res.statusText})`;
 
-                const clientReceivedAt = Date.now();
+                if (res.ok) {
+                    const { receivedRequest: serverReceivedAt } =
+                        await res.json();
 
-                rtt.innerText = `RTT: ${clientReceivedAt - sentAt}ms`;
-                to.innerText = `To Server: ${serverReceivedAt - sentAt}ms`;
-                from.innerText = `From Server: ${clientReceivedAt - serverReceivedAt}ms`;
+                    const clientReceivedAt = Date.now();
+
+                    rtt.innerText = `RTT: ${clientReceivedAt - sentAt}ms`;
+                    to.innerText = `To Server: ${serverReceivedAt - sentAt}ms`;
+                    from.innerText = `From Server: ${clientReceivedAt - serverReceivedAt}ms`;
+                }
+
+                parseRateLimitHeader(res.headers.get('ratelimit'));
             }
 
-            setInterval(getPing, 2_000);
+            setInterval(() => void getPing(), 1_000);
+
+            void getPing();
         </script>
     </body>
 </html>

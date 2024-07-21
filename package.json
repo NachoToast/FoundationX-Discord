@@ -21,7 +21,8 @@
         "test": "vitest --run",
         "check-all": "pnpm typecheck && pnpm lint && pnpm check:spec && pnpm test",
         "coverage": "vitest run --coverage",
-        "dev": "tsx --watch-path=src --watch-path=config.json --watch-path=data/openapi.json --disable-warning=ExperimentalWarning src/main.ts"
+        "dev": "tsx --watch-path=src --watch-path=config.json --watch-path=openapi.json --disable-warning=ExperimentalWarning src/main.ts",
+        "gen:token": "tsx scripts/generateToken.ts"
     },
     "dependencies": {
         "cors": "^2.8.5",

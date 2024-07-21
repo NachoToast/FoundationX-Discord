@@ -1,4 +1,9 @@
-import { loadAll } from './loaders/index.js';
+import { connectToDatabase } from './global/connectToDatabase.js';
+import { loadConfig } from './global/loadConfig.js';
+import { startModules } from './global/startModules.js';
+import { startServices } from './global/startServices.js';
+
+const startTime = new Date();
 
 Object.keysT = Object.keys;
 Object.entriesT = Object.entries;
@@ -14,4 +19,10 @@ process.on('unhandledRejection', (error) => {
     process.exit(1);
 });
 
-await loadAll();
+const config = loadConfig();
+const db = await connectToDatabase(config);
+
+globalThis.AppGlobals = { config, db, startTime };
+
+await startServices();
+await startModules();

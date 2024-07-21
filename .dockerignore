@@ -2,9 +2,12 @@
 
 *
 
-!data
 !src
+!static
+
 !config.json
+!games.txt
+!openapi.json
 !package.json
 !pnpm-lock.yaml
 !tsconfig.json

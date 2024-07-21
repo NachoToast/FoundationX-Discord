@@ -1,95 +1,93 @@
 {
+    "$schema": ".github/config-schema.json",
     "production": false,
-    "developerUserId": "240312568273436674",
-    "mainBot": {
-        "embedColour": "#3f48cc",
-        "token": "abcdefg",
-        "loginTimeout": 10,
-        "deployTimeout": 10,
-        "reactRoles": {
-            "guildId": "1256029842571530262",
-            "channelId": "1256029842571530265",
-            "roles": {
-                "1256029952025956382": {
-                    "label": "SCP:SL",
-                    "style": 4,
-                    "emoji": "👻",
-                    "addMessage": "Welcome to the foundation!"
+    "services": {
+        "mongoDb": {
+            "uri": "mongodb+srv://<username>:<password>@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+            "dbName": "dev",
+            "connectTimeout": 10
+        },
+        "discordAuth": {
+            "clientId": "<client id>",
+            "clientSecret": "<client secret>",
+            "redirectUri": "http://localhost:5000/static/discordAuth"
+        }
+    },
+    "modules": {
+        "mainBot": {
+            "enabled": true,
+            "embedColour": "#3f48cc",
+            "token": "<bot token>",
+            "loginTimeout": 10,
+            "deployTimeout": 10,
+            "developerId": "<user id>",
+            "reactRoles": {
+                "enabled": true,
+                "guildId": "<guild id>",
+                "channelId": "<channel id>",
+                "roles": [
+                    {
+                        "roleId": "<role id 1>",
+                        "label": "SCP:SL",
+                        "style": 4,
+                        "emoji": "👻",
+                        "addMessage": "Welcome to the foundation!"
+                    },
+                    {
+                        "roleId": "<role id 2>",
+                        "label": "Minecraft",
+                        "style": 3,
+                        "emoji": "🟩"
+                    },
+                    {
+                        "roleId": "<role id 3>",
+                        "label": "Rust",
+                        "style": 4,
+                        "emoji": "☢"
+                    },
+                    {
+                        "roleId": "<role id 4>",
+                        "label": "Updates",
+                        "style": 1,
+                        "emoji": "📆"
+                    },
+                    {
+                        "roleId": "<role id 5>",
+                        "label": "Game Night",
+                        "style": 2,
+                        "emoji": "🏆",
+                        "addMessage": "You now have the **%s** role, look forward to Crab Game 🦀"
+                    }
+                ]
+            }
+        },
+        "serverStatsBots": {
+            "enabled": true,
+            "updateInterval": 60,
+            "loginTimeout": 10,
+            "bots": [
+                {
+                    "token": "<bot token 1>",
+                    "serverId": "<secret lab server id>"
                 },
-                "1256029959684620339": {
-                    "label": "Minecraft",
-                    "style": 3,
-                    "emoji": "🟩"
+                {
+                    "token": "<bot token 2>",
+                    "serverId": "<secret lab server id>"
                 },
-                "1256029960225951885": {
-                    "label": "Rust",
-                    "style": 4,
-                    "emoji": "☢"
-                },
-                "1256030054115446858": {
-                    "label": "Updates",
-                    "style": 1,
-                    "emoji": "📆"
-                },
-                "1256030054706712586": {
-                    "label": "Game Night",
-                    "style": 2,
-                    "emoji": "🏆",
-                    "addMessage": "You now have the **%s** role, look forward to Crab Game 🦀"
+                {
+                    "token": "<bot token 3>",
+                    "serverId": "<secret lab server id>"
                 }
-            }
+            ]
+        },
+        "webApi": {
+            "enabled": true,
+            "port": 5000,
+            "clientUrls": ["*"],
+            "rateLimit": 60,
+            "proxyCount": 0,
+            "jwtSecret": "<some random string>",
+            "serverStatsBots": []
         }
-    },
-    "cluster": {
-        "updateInterval": 60,
-        "loginTimeout": 10,
-        "bots": [
-            {
-                "token": "abcdefg",
-                "serverId": "70248"
-            },
-            {
-                "token": "abcdefg",
-                "serverId": "70108"
-            },
-            {
-                "token": "abcdefg",
-                "serverId": "70249"
-            },
-            {
-                "token": "abcdefg",
-                "serverId": "72054"
-            }
-        ]
-    },
-    "webApi": {
-        "port": 5000,
-        "clientUrls": ["*"],
-        "rateLimit": 60,
-        "proxyCount": 0,
-        "jwtSecret": "some super secret string"
-    },
-    "mongoDb": {
-        "uri": "mongodb+srv://<username>:<password>@cluster0.abcdefg.mongodb.net/?retryWrites=true&w=majority",
-        "dbName": "v2",
-        "connectTimeout": 10
-    },
-    "serverStats": {
-        "expectedUpdateInterval": 30,
-        "servers": {
-            "70248": {
-                "authToken": "some secure string",
-                "discordToken": "abcdefg"
-            },
-            "70108": {
-                "authToken": "some secure string",
-                "discordToken": "abcdefg"
-            }
-        }
-    },
-    "discordAuth": {
-        "clientId": "1156811935354994712",
-        "clientSecret": "your client secret",
-        "redirectUri": "http://localhost:5000/static/discordOAuth"
     }
 }

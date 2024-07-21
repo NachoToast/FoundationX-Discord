@@ -1,0 +1,1017 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "FoundationX API",
+        "description": "Official web API for the FoundationX server network.",
+        "contact": {
+            "name": "NachoToast",
+            "url": "https://github.com/NachoToast",
+            "email": "32235595+NachoToast@users.noreply.github.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/NachoToast/FoundationX-API/blob/main/LICENSE"
+        },
+        "version": "3.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:{port}",
+            "description": "Development Server",
+            "variables": {
+                "port": {
+                    "default": "5000"
+                }
+            }
+        },
+        {
+            "url": "https://api.foundationxservers.com",
+            "description": "Production Server"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "operationId": "getRoot",
+                "description": "Basic API status checking endpoint, you can use this to see if the API is up and running.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/miscellaneous/getRoot.ts)",
+                "responses": {
+                    "200": {
+                        "description": "Basic API response.",
+                        "content": {
+                            "text/html": {
+                                "example": "You found the FoundationX API!"
+                            },
+
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "startTime": {
+                                            "type": "number"
+                                        },
+                                        "receivedRequest": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "required": [
+                                        "startTime",
+                                        "receivedRequest"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
+        "/ip": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "operationId": "getIp",
+                "description": "IP address information endpoint, used for debugging proxies.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/miscellaneous/getIp.ts)\n\n[Troubleshooting proxy issues with express-rate-limit](https://express-rate-limit.mintlify.app/guides/troubleshooting-proxy-issues)",
+                "responses": {
+                    "200": {
+                        "description": "IP address of request, may be `::` if viewing from the same network.",
+                        "content": {
+                            "text/html": {
+                                "example": "123.123.123.123"
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
+        "/spec": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "responses": {
+                    "200": {
+                        "description": "OpenAPI specification for the FoundationX API.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api-docs": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "responses": {
+                    "200": {
+                        "description": "This document.",
+                        "content": {
+                            "text/html": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/static": {
+            "get": {
+                "tags": ["Miscellaneous"],
+                "responses": {
+                    "200": {
+                        "description": "Static route index, these are not rate limited.",
+                        "content": {
+                            "text/html": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": ["Auth"],
+                "operationId": "postLogin",
+                "description": "Endpoint for completing the Discord OAuth2 login or signup process.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/auth/postLogin.ts)",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "redirectUri": {
+                                        "type": "string",
+                                        "example": "http://localhost:5000/static/discordAuth"
+                                    }
+                                },
+                                "required": ["code", "redirectUri"],
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successful login/signup response, contains user data and a site token for making elevated requests to the API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginOrSignupResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    },
+                    "502": {
+                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": ["Auth"],
+                "security": [{ "siteToken": [] }],
+                "operationId": "postLogout",
+                "description": "Endpoint for logging out.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/auth/postLogout.ts)",
+                "responses": {
+                    "200": {
+                        "description": "A successful logout response, no content."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    },
+                    "502": {
+                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    }
+                }
+            }
+        },
+        "/refresh": {
+            "post": {
+                "tags": ["Auth"],
+                "security": [{ "siteToken": [] }],
+                "operationId": "postRefresh",
+                "description": "Endpoint for refreshing an existing session.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/auth/postRefresh.ts)",
+                "responses": {
+                    "200": {
+                        "description": "A successful refresh response, contains updated user data and a new site token.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginOrSignupResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError404"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    },
+                    "502": {
+                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    }
+                }
+            }
+        },
+        "/server-stats": {
+            "get": {
+                "tags": ["Server Stats"],
+                "operationId": "getAllServerStats",
+                "description": "Endpoint for fetch all the tracked SCP:SL server stats.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/serverStats/getAllServerStats.ts)",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/perPage"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of server stats.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/WithPagination"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ServerStats"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Server Stats"],
+                "security": [{ "statsAuthToken": [] }],
+                "operationId": "postServerStats",
+                "description": "Endpoint used by our SCP:SL plugins for updating the stats of a specific SCP:SL server.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/serverStats/postServerStats.ts)",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "externalDocs": {
+                                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/ServerStats.ts",
+                                    "description": "src/public/ServerStats.ts"
+                                },
+                                "properties": {
+                                    "playerCount": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "playerCap": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    }
+                                },
+                                "required": ["playerCount", "playerCap"],
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Server stats updated successfully, no content."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
+        "/server-stats/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/serverId"
+                }
+            ],
+            "get": {
+                "tags": ["Server Stats"],
+                "operationId": "getServerStats",
+                "description": "Endpoint for fetching the stats of a specific SCP:SL server.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/serverStats/getServerStats.ts)",
+                "responses": {
+                    "200": {
+                        "description": "Server stats.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServerStats"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError404"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DiscordIdString": {
+                "type": "string",
+                "description": "A Discord ID.",
+                "example": "909645967081476147",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/DiscordIdString.ts",
+                    "description": "src/public/DiscordIdString.ts"
+                }
+            },
+            "LogAction": {
+                "type": "string",
+                "enum": ["rankChange", "clearLog", "discordRefresh"],
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogAction.ts",
+                    "description": "src/public/LogAction.ts"
+                }
+            },
+            "LoginOrSignupResponse": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LoginOrSignupResponse.ts",
+                    "description": "src/public/LoginOrSignupResponse.ts"
+                },
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "expiresIn": {
+                        "type": "integer",
+                        "description": "Seconds until session expires."
+                    },
+                    "siteToken": {
+                        "type": "string",
+                        "description": "Signed JWT to use in `Authorization` header for any elevated requests to the API."
+                    }
+                }
+            },
+            "LogItem": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogItems.ts",
+                    "description": "src/public/LogItems.ts"
+                },
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "doneById": {
+                        "type": "string"
+                    },
+                    "doneOnId": {
+                        "type": "string"
+                    },
+                    "doneAt": {
+                        "type": "number"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/LogAction"
+                    }
+                },
+                "required": ["id", "doneById", "doneOnId", "doneAt", "type"]
+            },
+            "WithPagination": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/Pagination.ts",
+                    "description": "src/public/Pagination.ts"
+                },
+                "properties": {
+                    "totalItemCount": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Total number of relevant items across all pages."
+                    },
+                    "items": {
+                        "type": "array",
+                        "description": "Items on this specific page."
+                    }
+                },
+                "required": ["totalItemCount", "items"],
+                "additionalProperties": false
+            },
+            "RankLog": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/LogItem" }],
+                "properties": {
+                    "oldRank": {
+                        "$ref": "#/components/schemas/UserRank"
+                    },
+                    "newRank": {
+                        "$ref": "#/components/schemas/UserRank"
+                    }
+                },
+                "required": ["oldRank", "newRank"],
+                "additionalProperties": false
+            },
+            "ClearLog": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/LogItem" }],
+                "properties": {
+                    "numCleared": {
+                        "type": "integer"
+                    }
+                },
+                "required": ["numCleared"],
+                "additionalProperties": false
+            },
+            "DiscordRefreshLog": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/LogItem" }],
+                "properties": {
+                    "oldDiscord": {
+                        "$ref": "#/components/schemas/UserDiscord"
+                    },
+                    "oldSteamConnections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SteamConnection"
+                        }
+                    },
+                    "newDiscord": {
+                        "$ref": "#/components/schemas/UserDiscord"
+                    },
+                    "newSteamConnections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SteamConnection"
+                        }
+                    }
+                },
+                "required": ["oldDiscord", "newDiscord"],
+                "additionalProperties": false
+            },
+            "ServerStats": {
+                "type": "object",
+                "description": "Statistics for a SCP: SL server that is tracked by our API.",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/ServerStats.ts",
+                    "description": "src/public/ServerStats.ts"
+                },
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "SCP:SL server ID."
+                    },
+                    "reportedAt": {
+                        "type": "integer"
+                    },
+                    "playerCount": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "playerCap": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "required": ["_id", "reportedAt", "playerCount", "playerCap"],
+                "additionalProperties": false
+            },
+            "SiteErrorObject": {
+                "type": "object",
+                "description": "Generic error object returned by the server.",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/SiteErrorObject.ts",
+                    "description": "src/public/SiteErrorObject.ts"
+                },
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "The error described in a few words.",
+                        "example": "Failed to Fetch User"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A sentence that explains how the error occurred.",
+                        "example": "A user with this ID does not exist in the database."
+                    }
+                },
+                "required": ["title", "description"]
+            },
+            "SitePermissions": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/SitePermissions.ts",
+                    "description": "src/public/SitePermissions.ts"
+                },
+                "properties": {
+                    "byRank": {
+                        "type": "object",
+                        "properties": {
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "set": {
+                                        "$ref": "#/components/schemas/UserSetPermissions"
+                                    },
+                                    "update": {
+                                        "$ref": "#/components/schemas/UserUpdatePermissions"
+                                    },
+                                    "view": {
+                                        "$ref": "#/components/schemas/UserViewPermissions"
+                                    }
+                                },
+                                "required": ["set", "update", "view"],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": ["user"],
+                        "additionalProperties": false
+                    },
+                    "hierarchy": {
+                        "type": "object"
+                    }
+                },
+                "required": ["byRank", "hierarchy"],
+                "additionalProperties": false
+            },
+            "SteamConnection": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/SteamConnection.ts",
+                    "description": "src/public/SteamConnection.ts"
+                },
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/SteamId64"
+                    },
+                    "username": {
+                        "type": "string"
+                    }
+                },
+                "required": ["id", "username"],
+                "additionalProperties": false
+            },
+            "SteamId64": {
+                "type": "string",
+                "description": "A SteamID64.",
+                "example": "76561191234567890",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/SteamId64.ts",
+                    "description": "src/public/SteamId64.ts"
+                }
+            },
+            "User": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/User.ts",
+                    "description": "src/public/User.ts"
+                },
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "rank": {
+                        "$ref": "#/components/schemas/UserRank"
+                    },
+                    "discord": {
+                        "type": "object",
+                        "nullable": true,
+                        "allOf": [
+                            { "$ref": "#/components/schemas/UserDiscord" }
+                        ]
+                    },
+                    "steam": {
+                        "type": "object",
+                        "nullable": true,
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SteamConnection"
+                            }
+                        ]
+                    },
+                    "otherSteamConnections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SteamConnection"
+                        }
+                    },
+                    "economy": {
+                        "type": "object",
+                        "properties": {
+                            "balance": {
+                                "type": "integer"
+                            },
+                            "lifetimeBalance": {
+                                "type": "integer"
+                            },
+                            "lifetimePurchaseCount": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "balance",
+                            "lifetimeBalance",
+                            "lifetimePurchaseCount"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "latestIp": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "firstSeenAt": {
+                                "type": "integer"
+                            },
+                            "lastSeenAt": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": ["firstSeenAt", "lastSeenAt"],
+                        "additionalProperties": false
+                    },
+                    "actionsPerformedLog": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "description": "Log item ID."
+                        }
+                    },
+                    "actionsReceivedLog": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "description": "Log item ID."
+                        }
+                    }
+                },
+                "required": ["id", "rank", "discord", "economy", "meta"],
+                "additionalProperties": false
+            },
+            "UserDiscord": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/User.ts",
+                    "description": "src/public/User.ts"
+                },
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/DiscordIdString"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "lastUpdatedAt": {
+                        "type": "number"
+                    }
+                },
+                "required": ["username", "avatar"],
+                "additionalProperties": false
+            },
+            "UserRank": {
+                "type": "string",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/UserRank.ts",
+                    "description": "src/public/UserRank.ts"
+                },
+                "enum": [
+                    "none",
+                    "admin",
+                    "developer",
+                    "siteDeveloper",
+                    "eventManager",
+                    "communityManager",
+                    "headOfStaff",
+                    "owner"
+                ]
+            },
+            "UserSetPermissions": {
+                "type": "integer",
+                "description": "Permissions related to specific updating of properties of the `user` object.",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/UserSetPermissions.ts",
+                    "description": "src/public/UserSetPermissions.ts"
+                },
+                "minimum": 0,
+                "maximum": 3
+            },
+            "UserUpdatePermissions": {
+                "type": "integer",
+                "description": "Permissions related to non-specific updating of properties of the `user` object.",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/UserUpdatePermissions.ts",
+                    "description": "src/public/UserUpdatePermissions.ts"
+                },
+                "minimum": 0,
+                "maximum": 3
+            },
+            "UserViewPermissions": {
+                "type": "integer",
+                "description": "Permissions related to viewing properties of the user object.",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/UserViewPermissions.ts",
+                    "description": "src/public/UserViewPermissions.ts"
+                },
+                "minimum": 0,
+                "maximum": 31
+            }
+        },
+        "responses": {
+            "BadRequestError400": {
+                "description": "Error thrown when a request is malformed or otherwise an invalid shape. This can also be thrown when a request's origin header is present and not in the allowed origins whitelist (CORS error).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "object",
+                                    "externalDocs": {
+                                        "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/middleware/validatorErrorHandler.ts",
+                                        "description": "src/modules/webApi/middleware/validatorErrorHandler.ts"
+                                    },
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SiteErrorObject"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "additionalData": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "path": {
+                                                        "type": "string",
+                                                        "example": "/refresh"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Authorization header with scheme 'Bearer' required"
+                                                    },
+                                                    "error_code": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": ["path", "message"],
+                                                "additionalProperties": false
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "externalDocs": {
+                                        "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/errors/CorsError.ts",
+                                        "description": "src/errors/CorsError.ts"
+                                    },
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SiteErrorObject"
+                                        }
+                                    ],
+                                    "properties": {
+                                        "additionalData": {
+                                            "type": "string",
+                                            "description": "The origin header value that was checked."
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthError401": {
+                "description": "Error thrown when a request is made with insufficient or malformed credentials, such as having an invalid site token.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/errors/AuthError.ts",
+                                "description": "src/errors/AuthError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "ForbiddenError403": {
+                "description": "Error thrown when a user does not have the required permissions to do an attempt action, or the action is impossible regardless of permissions.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/errors/ForbiddenError.ts",
+                                "description": "src/errors/ForbiddenError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "NotFoundError404": {
+                "description": "Error thrown when an item does not exist in the database.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/errors/NotFoundError.ts",
+                                "description": "src/errors/NotFoundError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "RateLimited429": {
+                "description": "Too many requests, rate limited.",
+                "headers": {
+                    "RateLimit": {
+                        "required": true,
+                        "description": "Information about the rate limit that was exceeded.",
+                        "schema": {
+                            "type": "string",
+                            "externalDocs": {
+                                "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-ratelimit-headers-07#name-ratelimit",
+                                "description": "IETF rate limit header specification (draft 7)"
+                            }
+                        }
+                    }
+                }
+            },
+            "SecondaryRequestError502": {
+                "description": "Error thrown when an API call made by the server to another server fails.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/errors/SecondaryRequestError.ts",
+                                "description": "src/errors/SecondaryRequestError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ],
+                            "properties": {
+                                "additionalData": {
+                                    "type": "string",
+                                    "nullable": true
+                                }
+                            },
+                            "required": ["additionalData"]
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "serverId": {
+                "required": true,
+                "in": "path",
+                "name": "id",
+                "schema": {
+                    "type": "string",
+                    "description": "Secret Lab server ID.",
+                    "example": "123456"
+                }
+            },
+            "page": {
+                "required": true,
+                "in": "query",
+                "name": "page",
+                "schema": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Page number, starts at 0.",
+                    "example": 0,
+                    "externalDocs": {
+                        "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/Pagination.ts",
+                        "description": "src/public/Pagination.ts"
+                    }
+                }
+            },
+            "perPage": {
+                "required": true,
+                "in": "query",
+                "name": "perPage",
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Maximum number of results to show per page.",
+                    "enum": [5, 10, 20, 50, 100],
+                    "example": 20,
+                    "externalDocs": {
+                        "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/Pagination.ts",
+                        "description": "src/public/Pagination.ts"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "siteToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "JWT signed by the server, contains Discord access token, refresh token, Discord user ID, and SteamID64."
+            },
+            "statsAuthToken": {
+                "type": "apiKey",
+                "description": "Authorization token for updating server stats.",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Miscellaneous",
+            "description": "Miscellaneous functionality."
+        },
+        {
+            "name": "Server Stats",
+            "description": "Fetching and updating reported SL server stats."
+        },
+        {
+            "name": "Auth",
+            "description": "Logging in, logging out, and refreshing."
+        }
+    ]
+}

@@ -1,52 +1,56 @@
-import { Client } from 'discord.js';
-import { Express } from 'express';
 import { Db } from 'mongodb';
-import { Config } from '../types/index.js';
+import { Config } from '../global/types/Config.js';
 
 const mockedConfig: Config = {
     production: false,
-    mainBot: {
-        embedColour: '#FFFFFF',
-        token: '',
-        loginTimeout: 0,
-        deployTimeout: 0,
-        reactRoles: {
-            guildId: '',
-            channelId: '',
-            roles: {},
+    services: {
+        mongoDb: {
+            uri: '',
+            dbName: '',
+            connectTimeout: 0,
+        },
+        discordAuth: {
+            clientId: '',
+            clientSecret: '',
+            redirectUri: '',
         },
     },
-    webApi: {
-        port: 0,
-        clientUrls: [],
-        rateLimit: 0,
-        proxyCount: 0,
-        jwtSecret: '',
-    },
-    mongoDb: {
-        uri: '',
-        dbName: '',
-        connectTimeout: 0,
-    },
-    serverStats: {
-        expectedUpdateInterval: 1,
-        loginTimeout: 0,
-        servers: {},
-    },
-    discordAuth: {
-        clientId: '',
-        clientSecret: '',
-        redirectUri: '',
+    modules: {
+        mainBot: {
+            enabled: false,
+            embedColour: '#',
+            token: '',
+            loginTimeout: 0,
+            deployTimeout: 0,
+            reactRoles: {
+                enabled: false,
+                guildId: '',
+                channelId: '',
+                roles: [],
+            },
+        },
+        serverStatsBots: {
+            enabled: false,
+            updateInterval: 0,
+            loginTimeout: 0,
+            bots: [],
+        },
+        webApi: {
+            enabled: false,
+            port: 0,
+            clientUrls: [],
+            rateLimit: 0,
+            proxyCount: 0,
+            jwtSecret: '',
+            serverStatsBots: [],
+        },
     },
 };
 
 export function mockGlobals(): void {
     globalThis.AppGlobals = {
-        client: {} as Client<true>,
         config: mockedConfig,
-        app: {} as Express,
         db: {} as Db,
         startTime: new Date(),
-        commit: null,
     };
 }
