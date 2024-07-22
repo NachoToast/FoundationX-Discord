@@ -5,6 +5,7 @@ import {
     PresenceStatusData,
 } from 'discord.js';
 import { readFileSync } from 'fs';
+import { NotFoundError } from '../../errors/NotFoundError.js';
 import {
     awaitOrTimeout,
     TimeoutError,
@@ -90,9 +91,12 @@ export class StatsBot {
 
         try {
             newStats = await ServerStatsService.getStatsById(this.serverId);
-        } catch {
-            // Stats don't exist in database, so show as offline.
+        } catch (error) {
+            if (!(error instanceof NotFoundError)) {
+                throw error;
+            }
 
+            // Stats don't exist in database, so show as offline.
             if (!this.isShowingAsOffline) {
                 this.client.user.setPresence(StatsBot.OFFLINE_STATE);
                 this.isShowingAsOffline = true;

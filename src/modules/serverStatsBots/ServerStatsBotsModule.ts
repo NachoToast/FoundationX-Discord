@@ -31,7 +31,9 @@ export class ServerStatsBotsModule extends Module {
 
         setInterval(() => {
             for (const instance of this.instances) {
-                void instance.update();
+                instance.update().catch((error: unknown) => {
+                    console.log(error);
+                });
             }
         }, updateInterval * 1_000);
     }
