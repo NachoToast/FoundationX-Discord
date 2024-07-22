@@ -68,15 +68,15 @@
             "bots": [
                 {
                     "token": "<bot token 1>",
-                    "serverId": "<secret lab server id>"
+                    "serverId": "<secret lab server id 1>"
                 },
                 {
                     "token": "<bot token 2>",
-                    "serverId": "<secret lab server id>"
+                    "serverId": "<secret lab server id 2>"
                 },
                 {
                     "token": "<bot token 3>",
-                    "serverId": "<secret lab server id>"
+                    "serverId": "<secret lab server id 3>"
                 }
             ]
         },
