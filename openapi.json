@@ -329,6 +329,10 @@
                     "401": {
                         "$ref": "#/components/responses/AuthError401"
                     },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenError403"
+                    },
+
                     "429": {
                         "$ref": "#/components/responses/RateLimited429"
                     }
@@ -875,7 +879,13 @@
                                 {
                                     "$ref": "#/components/schemas/SiteErrorObject"
                                 }
-                            ]
+                            ],
+                            "properties": {
+                                "additionalData": {
+                                    "type": "object",
+                                    "nullable": true
+                                }
+                            }
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 import { Request, RequestHandler } from 'express';
 import { AuthError } from '../../../errors/AuthError.js';
+import { ForbiddenError } from '../../../errors/ForbiddenError.js';
 import { UserService } from '../../../services/index.js';
 import { validateSiteToken } from '../auth/validateSiteToken.js';
 import { AuthScope } from '../types/auth/AuthScope.js';
@@ -108,7 +109,7 @@ export function registerProvider(
                 }
 
                 if (!endpointProvider.isTokenValid(token)) {
-                    throw new AuthError(
+                    throw new ForbiddenError(
                         'Invalid Authorization',
                         'The token provided is invalid, please contact the site developer.',
                     );
