@@ -32,14 +32,14 @@ export const postLogin: EndpointProvider<LoginRequest, LoginOrSignupResponse> =
             let user: UserDocument;
 
             try {
-                user = await UserService.updateExistingUser(
+                user = await UserService.updateFromDiscord(
                     discordUser,
                     connections,
                     req.ip ?? null,
                 );
             } catch (error) {
                 if (error instanceof NotFoundError) {
-                    user = await UserService.createNewUser(
+                    user = await UserService.createFromDiscord(
                         discordUser,
                         connections,
                         req.ip ?? null,

@@ -5,7 +5,7 @@ import { UserRank } from '../../public/UserRank.js';
 import { getUserDb, UserDocument } from './db.js';
 
 /** Creates a new user from a Discord login. */
-export async function createNewUser(
+export async function createFromDiscord(
     discord: APIUser,
     steamConnections: SteamConnection[],
     ip: string | null,
@@ -28,6 +28,10 @@ export async function createNewUser(
             latestIp: ip,
             firstSeenAt: now,
             lastSeenAt: now,
+            firstSeenAtDiscord: now,
+            lastSeenAtDiscord: now,
+            firstSeenAtSteam: null,
+            lastSeenAtSteam: null,
         },
         actionsPerformedLog: [],
         actionsReceivedLog: [],

@@ -1,7 +1,6 @@
 import { APIUser } from 'discord.js';
 import {
     FindOneAndUpdateOptions,
-    ObjectId,
     StrictFilter,
     StrictUpdateFilter,
 } from 'mongodb';
@@ -15,7 +14,7 @@ import { getUserDb, UserDocument } from './db.js';
  * @throws Throws a {@link NotFoundError} if the user does not exist in the
  * database.
  */
-export async function updateExistingUser(
+export async function updateFromDiscord(
     discord: APIUser,
     steamConnections: SteamConnection[],
     ip: string | null,
@@ -36,6 +35,7 @@ export async function updateExistingUser(
 
             'meta.latestIp': ip,
             'meta.lastSeenAt': now,
+            'meta.lastSeenAtDiscord': now,
         },
     };
 
@@ -51,23 +51,4 @@ export async function updateExistingUser(
     }
 
     return user;
-}
-
-/** Updates user metadata asynchronously. */
-export function updateExistingUserBasic(id: string, ip: string | null): void {
-    const update: StrictUpdateFilter<UserDocument> = {
-        $set: {
-            'meta.latestIp': ip,
-            'meta.lastSeenAt': Date.now(),
-        },
-    };
-
-    getUserDb()
-        .updateOne({ _id: new ObjectId(id) }, update)
-        .catch((error: unknown) => {
-            console.warn(
-                `Failed to update user metadata for user ${id}:`,
-                error,
-            );
-        });
 }

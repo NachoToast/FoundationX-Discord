@@ -36,6 +36,14 @@ export interface User {
         firstSeenAt: number;
 
         lastSeenAt: number;
+
+        firstSeenAtDiscord?: number | null;
+
+        lastSeenAtDiscord?: number | null;
+
+        firstSeenAtSteam?: number | null;
+
+        lastSeenAtSteam?: number | null;
     };
 
     actionsPerformedLog?: LogItem['id'][];

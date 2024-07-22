@@ -6,7 +6,8 @@ export const postLogout: EndpointProvider = {
     auth: AuthScope.TokenOnly,
     async handleRequest({ req, res, auth }) {
         await DiscordAuthService.revokeAccessToken(auth.refreshToken);
-        UserService.updateExistingUserBasic(auth.userId, req.ip ?? null);
+
+        UserService.updateFromLogout(auth.userId, req.ip ?? null);
 
         res.sendStatus(200);
     },

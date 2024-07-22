@@ -17,7 +17,7 @@ export const postRefresh: EndpointProvider<void, LoginOrSignupResponse> = {
             DiscordAuthService.getUserConnections(newDiscordAuth.access_token),
         ]);
 
-        const user = await UserService.updateExistingUser(
+        const user = await UserService.updateFromDiscord(
             discordUser,
             connections,
             req.ip ?? null,

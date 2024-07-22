@@ -686,6 +686,22 @@
                             },
                             "lastSeenAt": {
                                 "type": "integer"
+                            },
+                            "firstSeenAtDiscord": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "lastSeenAtDiscord": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "firstSeenAtSteam": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "lastSeenAtSteam": {
+                                "type": "integer",
+                                "nullable": true
                             }
                         },
                         "required": ["firstSeenAt", "lastSeenAt"],
