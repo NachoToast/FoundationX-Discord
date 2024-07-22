@@ -1,7 +1,6 @@
 import { APIUser } from 'discord.js';
-import { ObjectId } from 'mongodb';
 import { SteamConnection } from '../../public/SteamConnection.js';
-import { UserRank } from '../../public/UserRank.js';
+import { createNewInternal } from './core/createNewInternal.js';
 import { getUserDb, UserDocument } from './db.js';
 
 /** Creates a new user from a Discord login. */
@@ -12,30 +11,21 @@ export async function createFromDiscord(
 ): Promise<UserDocument> {
     const now = Date.now();
 
-    const newUser: UserDocument = {
-        _id: new ObjectId(),
-        rank: UserRank.None,
-        discord: {
-            id: discord.id,
-            username: discord.username,
-            avatar: discord.avatar,
-            lastUpdatedAt: now,
-        },
-        steam: steamConnections.at(0) ?? null,
-        otherSteamConnections: steamConnections.slice(1),
-        economy: { balance: 0, lifetimeBalance: 0, lifetimePurchaseCount: 0 },
-        meta: {
-            latestIp: ip,
-            firstSeenAt: now,
-            lastSeenAt: now,
-            firstSeenAtDiscord: now,
-            lastSeenAtDiscord: now,
-            firstSeenAtSteam: null,
-            lastSeenAtSteam: null,
-        },
-        actionsPerformedLog: [],
-        actionsReceivedLog: [],
+    const newUser = createNewInternal(now);
+
+    newUser.discord = {
+        id: discord.id,
+        username: discord.username,
+        avatar: discord.avatar,
+        lastUpdatedAt: now,
     };
+
+    newUser.steam = steamConnections.at(0) ?? null;
+    newUser.otherSteamConnections = steamConnections.slice(1);
+
+    newUser.meta.latestIp = ip;
+    newUser.meta.firstSeenAtDiscord = now;
+    newUser.meta.lastSeenAtDiscord = now;
 
     await getUserDb().insertOne(newUser);
 

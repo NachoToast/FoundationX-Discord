@@ -26,7 +26,7 @@ export const postServerStats: EndpointProvider<ServerStatsRequest> = {
             );
         }
 
-        await ServerStatsService.updateServerStats(id, req.body);
+        await ServerStatsService.upsertServerStats(id, req.body);
 
         res.sendStatus(200);
     },
