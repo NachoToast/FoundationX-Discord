@@ -1,11 +1,13 @@
-import { InServerStats } from '../../../../public/ServerStats.js';
+import { ServerStats } from '../../../../public/ServerStats.js';
 import { ServerStatsService } from '../../../../services/index.js';
 import { AuthScope } from '../../types/auth/AuthScope.js';
 import { EndpointProvider } from '../../types/express/EndpointProvider.js';
 
+type ServerStatsRequest = Omit<ServerStats, '_id' | 'reportedAt'>;
+
 const tokenServerMap = new Map<string, string>();
 
-export const postServerStats: EndpointProvider<InServerStats> = {
+export const postServerStats: EndpointProvider<ServerStatsRequest> = {
     auth: AuthScope.Plugin,
     onStart() {
         for (const bot of AppGlobals.config.modules.webApi.serverStatsBots) {

@@ -10,9 +10,3 @@ export interface ServerStats {
 
     playerCap: number;
 }
-
-export interface InServerStats {
-    playerCount: number;
-
-    playerCap: number;
-}

@@ -1,4 +1,4 @@
-import { InServerStats, ServerStats } from '../../public/ServerStats.js';
+import { ServerStats } from '../../public/ServerStats.js';
 import { getServerStatsDb } from './db.js';
 
 /**
@@ -8,7 +8,7 @@ import { getServerStatsDb } from './db.js';
  */
 export async function updateServerStats(
     serverId: string,
-    newStats: InServerStats,
+    newStats: Omit<ServerStats, '_id' | 'reportedAt'>,
 ): Promise<ServerStats> {
     const server = await getServerStatsDb().findOneAndUpdate(
         { _id: serverId },
