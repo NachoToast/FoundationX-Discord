@@ -474,12 +474,12 @@
                     "description": "src/public/DiscordIdString.ts"
                 }
             },
-            "LogAction": {
+            "LogItemType": {
                 "type": "string",
                 "enum": ["rankChange", "clearLog", "discordRefresh"],
                 "externalDocs": {
-                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogAction.ts",
-                    "description": "src/public/LogAction.ts"
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogItemType.ts",
+                    "description": "src/public/LogItemType.ts"
                 }
             },
             "LoginOrSignupResponse": {
@@ -522,7 +522,7 @@
                         "type": "number"
                     },
                     "type": {
-                        "$ref": "#/components/schemas/LogAction"
+                        "$ref": "#/components/schemas/LogItemType"
                     }
                 },
                 "required": ["id", "doneById", "doneOnId", "doneAt", "type"]

@@ -1,9 +1,9 @@
-import { LogAction } from './LogAction.js';
+import { LogItemType } from './LogItemType.js';
 import { SteamConnection } from './SteamConnection.js';
 import { User } from './User.js';
 import { UserRank } from './UserRank.js';
 
-export interface LogItem<T extends LogAction = LogAction> {
+export interface LogItem<T extends LogItemType = LogItemType> {
     id: string;
 
     doneById: User['id'];
@@ -15,17 +15,17 @@ export interface LogItem<T extends LogAction = LogAction> {
     type: T;
 }
 
-export interface RankLog extends LogItem<LogAction.RankChange> {
+export interface RankLog extends LogItem<LogItemType.RankChange> {
     oldRank: UserRank;
 
     newRank: UserRank;
 }
 
-export interface ClearLog extends LogItem<LogAction.ClearLog> {
+export interface ClearLog extends LogItem<LogItemType.ClearLog> {
     numCleared: number;
 }
 
-export interface DiscordRefreshLog extends LogItem<LogAction.DiscordRefresh> {
+export interface DiscordRefreshLog extends LogItem<LogItemType.DiscordRefresh> {
     oldDiscord: User['discord'];
 
     oldSteamConections?: SteamConnection[];

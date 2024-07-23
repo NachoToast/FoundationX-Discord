@@ -1,4 +1,4 @@
-export enum LogAction {
+export enum LogItemType {
     RankChange = 'rankChange',
 
     ClearLog = 'clearLog',
