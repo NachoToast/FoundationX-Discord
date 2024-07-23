@@ -11,6 +11,7 @@ import { registerProvider } from './registerProvider.js';
 import { getAllServerStats } from './serverStats/getAllServerStats.js';
 import { getServerStats } from './serverStats/getServerStats.js';
 import { postServerStats } from './serverStats/postServerStats.js';
+import { getMe } from './users/getMe.js';
 
 export function applyRoutes(app: Express): void {
     app.get('/', registerProvider(getRoot));
@@ -26,6 +27,8 @@ export function applyRoutes(app: Express): void {
     app.post('/server-stats', registerProvider(postServerStats));
 
     app.post('/economy/earnings', registerProvider(postEarnings));
+
+    app.get('/users/@me', registerProvider(getMe));
 }
 
 export function applyStaticRoutes(app: Express): void {

@@ -429,6 +429,38 @@
                     }
                 }
             }
+        },
+        "/users/@me": {
+            "get": {
+                "tags": ["User"],
+                "security": [{ "siteToken": [] }],
+                "operationId": "getMe",
+                "description": "Endpoint for data about the currently logged-in user.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/users/getMe.ts)",
+                "responses": {
+                    "200": {
+                        "description": "User information.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError404"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1106,6 +1138,10 @@
         {
             "name": "Economy",
             "description": "Economy-related functionality."
+        },
+        {
+            "name": "User",
+            "description": "User-related functionality."
         }
     ]
 }
