@@ -55,6 +55,7 @@ export interface Config {
             proxyCount: number;
             jwtSecret: string;
             serverStatsBots: { siteToken: string; serverId: string }[];
+            economyBotTokens: string[];
         };
     };
 }

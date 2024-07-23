@@ -87,7 +87,25 @@
             "rateLimit": 60,
             "proxyCount": 0,
             "jwtSecret": "<some random string>",
-            "serverStatsBots": []
+            "serverStatsBots": [
+                {
+                    "siteToken": "<some random string 1>",
+                    "serverId": "<secret lab server id 1>"
+                },
+                {
+                    "siteToken": "<some random string 2>",
+                    "serverId": "<secret lab server id 2>"
+                },
+                {
+                    "siteToken": "<some random string 3>",
+                    "serverId": "<secret lab server id 3>"
+                }
+            ],
+            "economyBotTokens": [
+                "<some random string 1>",
+                "<some random string 2>",
+                "<some random string 3>"
+            ]
         }
     }
 }

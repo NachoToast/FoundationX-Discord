@@ -5,5 +5,6 @@ export * from './getUserById.js';
 export * from './initialise.js';
 export * from './updateFromDiscord.js';
 export * from './updateFromLogout.js';
+export * from './upsertFromSteamEarning.js';
 
 export type User = UserDocument;

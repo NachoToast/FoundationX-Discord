@@ -4,6 +4,7 @@ import { JsonObject, serve, setup } from 'swagger-ui-express';
 import { postLogin } from './auth/postLogin.js';
 import { postLogout } from './auth/postLogout.js';
 import { postRefresh } from './auth/postRefresh.js';
+import { postEarnings } from './economy/earnings/postEarnings.js';
 import { getIp } from './miscellaneous/getIp.js';
 import { getRoot } from './miscellaneous/getRoot.js';
 import { registerProvider } from './registerProvider.js';
@@ -23,6 +24,8 @@ export function applyRoutes(app: Express): void {
     app.get('/server-stats/:id', registerProvider(getServerStats));
     app.get('/server-stats', registerProvider(getAllServerStats));
     app.post('/server-stats', registerProvider(postServerStats));
+
+    app.post('/economy/earnings', registerProvider(postEarnings));
 }
 
 export function applyStaticRoutes(app: Express): void {

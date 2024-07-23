@@ -142,6 +142,11 @@ export function validateConfig(config: Config): void {
                             siteToken.min(8);
                         }).child('serverId', ['string']);
                     });
+                })
+                .child('economyBotTokens', ['array'], (economyBotTokens) => {
+                    economyBotTokens.forEach(['string'], (economyBotToken) => {
+                        economyBotToken.min(8);
+                    });
                 });
         });
 }

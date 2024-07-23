@@ -43,6 +43,7 @@ const mockedConfig: Config = {
             proxyCount: 0,
             jwtSecret: '',
             serverStatsBots: [],
+            economyBotTokens: [],
         },
     },
 };
