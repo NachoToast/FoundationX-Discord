@@ -474,13 +474,90 @@
                     "description": "src/public/DiscordIdString.ts"
                 }
             },
-            "LogItemType": {
-                "type": "string",
-                "enum": ["rankChange", "clearLog", "discordRefresh"],
+            "EconomyRewardBase": {
+                "type": "object",
                 "externalDocs": {
-                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogItemType.ts",
-                    "description": "src/public/LogItemType.ts"
-                }
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/EconomyReward.ts",
+                    "description": "src/public/EconomyReward.ts"
+                },
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "subtitle": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "cost": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "postedAt": {
+                        "type": "integer"
+                    },
+                    "postedById": {
+                        "type": "string"
+                    },
+                    "lastUpdatedAt": {
+                        "type": "integer"
+                    },
+                    "expiresAt": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "title",
+                    "subtitle",
+                    "description",
+                    "image",
+                    "cost",
+                    "postedAt",
+                    "postedById",
+                    "lastUpdatedAt",
+                    "expiresAt",
+                    "type"
+                ]
+            },
+            "ItemReward": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/EconomyRewardBase" }],
+                "properties": {
+                    "itemId": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": ["item"]
+                    }
+                },
+                "required": ["itemId", "quantity", "item"],
+                "additionalProperties": false
+            },
+            "EconomyReward": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/EconomyReward.ts",
+                    "description": "src/public/EconomyReward.ts"
+                },
+                "anyOf": [
+                    {
+                        "$ref": "#/components/schemas/ItemReward"
+                    }
+                ]
             },
             "LoginOrSignupResponse": {
                 "type": "object",
@@ -502,7 +579,7 @@
                     }
                 }
             },
-            "LogItem": {
+            "LogItemBase": {
                 "type": "object",
                 "externalDocs": {
                     "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogItems.ts",
@@ -520,12 +597,90 @@
                     },
                     "doneAt": {
                         "type": "number"
-                    },
-                    "type": {
-                        "$ref": "#/components/schemas/LogItemType"
                     }
                 },
                 "required": ["id", "doneById", "doneOnId", "doneAt", "type"]
+            },
+            "RankLog": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/LogItemBase" }],
+                "properties": {
+                    "oldRank": {
+                        "$ref": "#/components/schemas/UserRank"
+                    },
+                    "newRank": {
+                        "$ref": "#/components/schemas/UserRank"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": ["rankChange"]
+                    }
+                },
+                "required": ["oldRank", "newRank", "type"],
+                "additionalProperties": false
+            },
+            "ClearLog": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/LogItemBase" }],
+                "properties": {
+                    "numCleared": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": ["clearLog"]
+                    }
+                },
+                "required": ["numCleared", "type"],
+                "additionalProperties": false
+            },
+            "DiscordRefreshLog": {
+                "type": "object",
+                "allOf": [{ "$ref": "#/components/schemas/LogItemBase" }],
+                "properties": {
+                    "oldDiscord": {
+                        "$ref": "#/components/schemas/UserDiscord"
+                    },
+                    "oldSteamConnections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SteamConnection"
+                        }
+                    },
+                    "newDiscord": {
+                        "$ref": "#/components/schemas/UserDiscord"
+                    },
+                    "newSteamConnections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SteamConnection"
+                        }
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": ["discordRefresh"]
+                    }
+                },
+                "required": ["oldDiscord", "newDiscord", "type"],
+                "additionalProperties": false
+            },
+            "LogItem": {
+                "type": "object",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/LogItems.ts",
+                    "description": "src/public/LogItems.ts"
+                },
+                "anyOf": [
+                    {
+                        "$ref": "#/components/schemas/RankLog"
+                    },
+                    {
+                        "$ref": "#/components/schemas/ClearLog"
+                    },
+                    {
+                        "$ref": "#/components/schemas/DiscordRefreshLog"
+                    }
+                ]
             },
             "WithPagination": {
                 "type": "object",
@@ -545,57 +700,6 @@
                     }
                 },
                 "required": ["totalItemCount", "items"],
-                "additionalProperties": false
-            },
-            "RankLog": {
-                "type": "object",
-                "allOf": [{ "$ref": "#/components/schemas/LogItem" }],
-                "properties": {
-                    "oldRank": {
-                        "$ref": "#/components/schemas/UserRank"
-                    },
-                    "newRank": {
-                        "$ref": "#/components/schemas/UserRank"
-                    }
-                },
-                "required": ["oldRank", "newRank"],
-                "additionalProperties": false
-            },
-            "ClearLog": {
-                "type": "object",
-                "allOf": [{ "$ref": "#/components/schemas/LogItem" }],
-                "properties": {
-                    "numCleared": {
-                        "type": "integer"
-                    }
-                },
-                "required": ["numCleared"],
-                "additionalProperties": false
-            },
-            "DiscordRefreshLog": {
-                "type": "object",
-                "allOf": [{ "$ref": "#/components/schemas/LogItem" }],
-                "properties": {
-                    "oldDiscord": {
-                        "$ref": "#/components/schemas/UserDiscord"
-                    },
-                    "oldSteamConnections": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/SteamConnection"
-                        }
-                    },
-                    "newDiscord": {
-                        "$ref": "#/components/schemas/UserDiscord"
-                    },
-                    "newSteamConnections": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/SteamConnection"
-                        }
-                    }
-                },
-                "required": ["oldDiscord", "newDiscord"],
                 "additionalProperties": false
             },
             "ServerStats": {

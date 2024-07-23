@@ -3,7 +3,7 @@ import { SteamConnection } from './SteamConnection.js';
 import { User } from './User.js';
 import { UserRank } from './UserRank.js';
 
-export interface LogItem<T extends LogItemType = LogItemType> {
+interface LogItemBase<T extends LogItemType> {
     id: string;
 
     doneById: User['id'];
@@ -15,17 +15,18 @@ export interface LogItem<T extends LogItemType = LogItemType> {
     type: T;
 }
 
-export interface RankLog extends LogItem<LogItemType.RankChange> {
+export interface RankLog extends LogItemBase<LogItemType.RankChange> {
     oldRank: UserRank;
 
     newRank: UserRank;
 }
 
-export interface ClearLog extends LogItem<LogItemType.ClearLog> {
+export interface ClearLog extends LogItemBase<LogItemType.ClearLog> {
     numCleared: number;
 }
 
-export interface DiscordRefreshLog extends LogItem<LogItemType.DiscordRefresh> {
+export interface DiscordRefreshLog
+    extends LogItemBase<LogItemType.DiscordRefresh> {
     oldDiscord: User['discord'];
 
     oldSteamConections?: SteamConnection[];
@@ -34,3 +35,5 @@ export interface DiscordRefreshLog extends LogItem<LogItemType.DiscordRefresh> {
 
     newSteamConnections?: SteamConnection[];
 }
+
+export type LogItem = RankLog | ClearLog | DiscordRefreshLog;
