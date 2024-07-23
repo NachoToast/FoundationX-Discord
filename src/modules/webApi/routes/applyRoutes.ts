@@ -5,6 +5,7 @@ import { postLogin } from './auth/postLogin.js';
 import { postLogout } from './auth/postLogout.js';
 import { postRefresh } from './auth/postRefresh.js';
 import { postEarnings } from './economy/earnings/postEarnings.js';
+import { getRewards } from './economy/rewards/getRewards.js';
 import { getIp } from './miscellaneous/getIp.js';
 import { getRoot } from './miscellaneous/getRoot.js';
 import { registerProvider } from './registerProvider.js';
@@ -27,6 +28,7 @@ export function applyRoutes(app: Express): void {
     app.post('/server-stats', registerProvider(postServerStats));
 
     app.post('/economy/earnings', registerProvider(postEarnings));
+    app.get('/economy/rewards', registerProvider(getRewards));
 
     app.get('/users/@me', registerProvider(getMe));
 }

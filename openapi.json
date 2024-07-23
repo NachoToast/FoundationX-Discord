@@ -430,6 +430,34 @@
                 }
             }
         },
+        "/economy/rewards": {
+            "get": {
+                "tags": ["Economy"],
+                "operationId": "getRewards",
+                "description": "Endpoint used to fetch all currently on-offer economy rewards.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/rewards/getRewards.ts)",
+                "responses": {
+                    "200": {
+                        "description": "List of currently-available economy rewards.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EconomyReward"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
         "/users/@me": {
             "get": {
                 "tags": ["User"],
@@ -524,8 +552,7 @@
                     "postedAt",
                     "postedById",
                     "lastUpdatedAt",
-                    "expiresAt",
-                    "type"
+                    "expiresAt"
                 ]
             },
             "ItemReward": {
@@ -533,7 +560,7 @@
                 "allOf": [{ "$ref": "#/components/schemas/EconomyRewardBase" }],
                 "properties": {
                     "itemId": {
-                        "type": "string"
+                        "type": "integer"
                     },
                     "quantity": {
                         "type": "integer",
@@ -544,8 +571,7 @@
                         "enum": ["item"]
                     }
                 },
-                "required": ["itemId", "quantity", "item"],
-                "additionalProperties": false
+                "required": ["itemId", "quantity", "type"]
             },
             "EconomyReward": {
                 "type": "object",
@@ -553,7 +579,7 @@
                     "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/EconomyReward.ts",
                     "description": "src/public/EconomyReward.ts"
                 },
-                "anyOf": [
+                "oneOf": [
                     {
                         "$ref": "#/components/schemas/ItemReward"
                     }
@@ -616,8 +642,7 @@
                         "enum": ["rankChange"]
                     }
                 },
-                "required": ["oldRank", "newRank", "type"],
-                "additionalProperties": false
+                "required": ["oldRank", "newRank", "type"]
             },
             "ClearLog": {
                 "type": "object",
@@ -631,8 +656,7 @@
                         "enum": ["clearLog"]
                     }
                 },
-                "required": ["numCleared", "type"],
-                "additionalProperties": false
+                "required": ["numCleared", "type"]
             },
             "DiscordRefreshLog": {
                 "type": "object",
@@ -661,8 +685,7 @@
                         "enum": ["discordRefresh"]
                     }
                 },
-                "required": ["oldDiscord", "newDiscord", "type"],
-                "additionalProperties": false
+                "required": ["oldDiscord", "newDiscord", "type"]
             },
             "LogItem": {
                 "type": "object",
