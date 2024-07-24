@@ -4,6 +4,7 @@ import { JsonObject, serve, setup } from 'swagger-ui-express';
 import { postLogin } from './auth/postLogin.js';
 import { postLogout } from './auth/postLogout.js';
 import { postRefresh } from './auth/postRefresh.js';
+import { deletePayouts } from './economy/deletePayouts.js';
 import { getPayouts } from './economy/getPayouts.js';
 import { getRewards } from './economy/getRewards.js';
 import { postEarnings } from './economy/postEarnings.js';
@@ -30,7 +31,9 @@ export function applyRoutes(app: Express): void {
 
     app.post('/economy/earnings', registerProvider(postEarnings));
     app.get('/economy/rewards', registerProvider(getRewards));
+
     app.get('/economy/payouts', registerProvider(getPayouts));
+    app.delete('/economy/payouts', registerProvider(deletePayouts));
 
     app.get('/users/@me', registerProvider(getMe));
 }

@@ -504,6 +504,44 @@
                         "$ref": "#/components/responses/RateLimited429"
                     }
                 }
+            },
+            "delete": {
+                "tags": ["Economy"],
+                "security": [{ "economyAuthToken": [] }],
+                "operationId": "deletePayouts",
+                "description": "Endpoint used by our SCP:SL plugins for completing payouts to users.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/deletePayouts.ts)",
+                "requestBody": {
+                    "required": true,
+                    "description": "Array of payout IDs to delete.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "66a0879f721ca9bfa3e854dd"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payouts successfully deleted, no content. This is also the response if no payouts were found."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenError403"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
             }
         },
         "/users/@me": {
