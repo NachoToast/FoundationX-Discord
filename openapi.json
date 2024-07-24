@@ -552,7 +552,8 @@
                     "postedAt",
                     "postedById",
                     "lastUpdatedAt",
-                    "expiresAt"
+                    "expiresAt",
+                    "type"
                 ]
             },
             "ItemReward": {
@@ -571,7 +572,7 @@
                         "enum": ["item"]
                     }
                 },
-                "required": ["itemId", "quantity", "type"]
+                "required": ["itemId", "quantity"]
             },
             "EconomyReward": {
                 "type": "object",
@@ -642,7 +643,7 @@
                         "enum": ["rankChange"]
                     }
                 },
-                "required": ["oldRank", "newRank", "type"]
+                "required": ["oldRank", "newRank"]
             },
             "ClearLog": {
                 "type": "object",
@@ -656,7 +657,7 @@
                         "enum": ["clearLog"]
                     }
                 },
-                "required": ["numCleared", "type"]
+                "required": ["numCleared"]
             },
             "DiscordRefreshLog": {
                 "type": "object",
@@ -685,7 +686,7 @@
                         "enum": ["discordRefresh"]
                     }
                 },
-                "required": ["oldDiscord", "newDiscord", "type"]
+                "required": ["oldDiscord", "newDiscord"]
             },
             "LogItem": {
                 "type": "object",
