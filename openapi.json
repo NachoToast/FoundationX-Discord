@@ -458,6 +458,54 @@
                 }
             }
         },
+        "/economy/payouts": {
+            "get": {
+                "tags": ["Economy"],
+                "security": [{ "economyAuthToken": [] }],
+                "operationId": "getPayouts",
+                "description": "Endpoint used by our SCP:SL plugins for fetching all payouts made to users.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/getPayouts.ts)",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "steamIds",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/SteamId64"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of all payouts for the given Steam IDs.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Payout"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenError403"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
+            }
+        },
         "/users/@me": {
             "get": {
                 "tags": ["User"],

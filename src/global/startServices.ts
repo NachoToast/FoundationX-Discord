@@ -1,5 +1,5 @@
-import { UserService } from '../services/index.js';
+import { EconomyService, UserService } from '../services/index.js';
 
 export async function startServices(): Promise<void> {
-    await Promise.all([UserService.initialise()]);
+    await Promise.all([UserService.initialise(), EconomyService.initialise()]);
 }
