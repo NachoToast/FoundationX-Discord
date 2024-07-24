@@ -377,7 +377,7 @@
                 "tags": ["Economy"],
                 "security": [{ "economyAuthToken": [] }],
                 "operationId": "postEarnings",
-                "description": "Endpoint used by our SCP:SL plugins for updating the balances of users.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/earnings/postEarnings.ts)",
+                "description": "Endpoint used by our SCP:SL plugins for updating the balances of users.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/postEarnings.ts)",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -434,7 +434,7 @@
             "get": {
                 "tags": ["Economy"],
                 "operationId": "getRewards",
-                "description": "Endpoint used to fetch all currently on-offer economy rewards.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/rewards/getRewards.ts)",
+                "description": "Endpoint used to fetch all currently on-offer economy rewards.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/getRewards.ts)",
                 "responses": {
                     "200": {
                         "description": "List of currently-available economy rewards.",
@@ -724,6 +724,48 @@
                     }
                 },
                 "required": ["totalItemCount", "items"],
+                "additionalProperties": false
+            },
+            "Payout": {
+                "type": "object",
+                "description": "Outgoing payment of a reward to a user.",
+                "externalDocs": {
+                    "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/public/Payout.ts",
+                    "description": "src/public/Payout.ts"
+                },
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "userSteamId": {
+                        "$ref": "#/components/schemas/SteamId64"
+                    },
+                    "userDiscordId": {
+                        "type": "string",
+                        "allOf": [
+                            { "$ref": "#/components/schemas/DiscordIdString" }
+                        ],
+                        "nullable": true
+                    },
+                    "rewardId": {
+                        "type": "string"
+                    },
+                    "costPaid": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "required": [
+                    "id",
+                    "userId",
+                    "userSteamId",
+                    "userDiscordId",
+                    "rewardId",
+                    "costPaid"
+                ],
                 "additionalProperties": false
             },
             "ServerStats": {

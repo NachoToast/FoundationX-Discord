@@ -1,7 +1,7 @@
-import { SteamId64 } from '../../../../../public/SteamId64.js';
-import { UserService } from '../../../../../services/index.js';
-import { AuthScope } from '../../../types/auth/AuthScope.js';
-import { EndpointProvider } from '../../../types/express/EndpointProvider.js';
+import { SteamId64 } from '../../../../public/SteamId64.js';
+import { UserService } from '../../../../services/index.js';
+import { AuthScope } from '../../types/auth/AuthScope.js';
+import { EndpointProvider } from '../../types/express/EndpointProvider.js';
 
 type EarningsRequest = {
     steamId: SteamId64;

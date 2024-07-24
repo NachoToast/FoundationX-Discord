@@ -1,7 +1,7 @@
-import { EconomyReward } from '../../../../../public/EconomyReward.js';
-import { EconomyService } from '../../../../../services/index.js';
-import { AuthScope } from '../../../types/auth/AuthScope.js';
-import { EndpointProvider } from '../../../types/express/EndpointProvider.js';
+import { EconomyReward } from '../../../../public/EconomyReward.js';
+import { EconomyService } from '../../../../services/index.js';
+import { AuthScope } from '../../types/auth/AuthScope.js';
+import { EndpointProvider } from '../../types/express/EndpointProvider.js';
 
 export const getRewards: EndpointProvider<void, EconomyReward[]> = {
     auth: AuthScope.None,
