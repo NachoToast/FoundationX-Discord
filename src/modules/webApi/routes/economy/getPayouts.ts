@@ -22,7 +22,6 @@ export const getPayouts: EndpointProvider<void, Payout[], void, Query> = {
         return tokens.has(token);
     },
     async handleRequest({ req, res }) {
-        console.log(req.query);
         const data = await EconomyService.getPayoutsBySteamId(
             req.query.steamIds,
         );
