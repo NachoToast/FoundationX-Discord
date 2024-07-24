@@ -6,6 +6,8 @@ import { User } from './User.js';
 export interface Payout {
     id: string;
 
+    purchasedAt: number;
+
     userId: User['id'];
 
     userSteamId: SteamId64;

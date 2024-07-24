@@ -785,6 +785,9 @@
                     "id": {
                         "type": "string"
                     },
+                    "purchasedAt": {
+                        "type": "integer"
+                    },
                     "userId": {
                         "type": "string"
                     },
@@ -808,6 +811,7 @@
                 },
                 "required": [
                     "id",
+                    "purchasedAt",
                     "userId",
                     "userSteamId",
                     "userDiscordId",
