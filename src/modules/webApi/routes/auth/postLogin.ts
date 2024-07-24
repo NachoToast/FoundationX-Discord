@@ -2,7 +2,6 @@ import { NotFoundError } from '../../../../errors/NotFoundError.js';
 import { convertId } from '../../../../global/util/idHelpers.js';
 import { LoginOrSignupResponse } from '../../../../public/LoginOrSignupResponse.js';
 import { DiscordAuthService, UserService } from '../../../../services/index.js';
-import { UserDocument } from '../../../../services/user/db.js';
 import { makeSiteToken } from '../../auth/makeSiteToken.js';
 import { AuthScope } from '../../types/auth/AuthScope.js';
 import { EndpointProvider } from '../../types/express/EndpointProvider.js';
@@ -29,7 +28,7 @@ export const postLogin: EndpointProvider<LoginRequest, LoginOrSignupResponse> =
                 DiscordAuthService.getUserConnections(discordAuth.access_token),
             ]);
 
-            let user: UserDocument;
+            let user;
 
             try {
                 user = await UserService.updateFromDiscord(
