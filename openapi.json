@@ -542,6 +542,65 @@
                         "$ref": "#/components/responses/RateLimited429"
                     }
                 }
+            },
+            "post": {
+                "tags": ["Economy"],
+                "security": [{ "siteToken": [] }],
+                "operationId": "postPayouts",
+                "description": "Reward purchasing endpoint.\n[Source](https://github.com/NachoToast/FoundationX-API/blob/main/src/modules/webApi/routes/economy/postPayouts.ts)",
+                "requestBody": {
+                    "required": true,
+                    "description": "Array of reward IDs to purchase.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "66a0879f721ca9bfa3e854dd"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Purchase successful.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "createdItems": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Payout"
+                                            }
+                                        },
+                                        "amountSpent": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        }
+                                    },
+                                    "required": ["createdItems", "amountSpent"],
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthError401"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/BrokeError403"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/RateLimited429"
+                    }
+                }
             }
         },
         "/users/@me": {
@@ -1227,6 +1286,42 @@
                                     "$ref": "#/components/schemas/SiteErrorObject"
                                 }
                             ]
+                        }
+                    }
+                }
+            },
+            "BrokeError403": {
+                "description": "Error thrown when a user lacks the required balance to do an attempted economy-related action.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "externalDocs": {
+                                "url": "https://github.com/NachoToast/FoundationX-API/blob/main/src/errors/BrokeError.ts",
+                                "description": "src/errors/BrokeError.ts"
+                            },
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/SiteErrorObject"
+                                }
+                            ],
+                            "properties": {
+                                "additionalData": {
+                                    "type": "object",
+                                    "properties": {
+                                        "have": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "require": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        }
+                                    },
+                                    "required": ["have", "require"],
+                                    "additionalProperties": false
+                                }
+                            }
                         }
                     }
                 }

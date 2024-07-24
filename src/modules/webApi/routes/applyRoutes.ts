@@ -8,6 +8,7 @@ import { deletePayouts } from './economy/deletePayouts.js';
 import { getPayouts } from './economy/getPayouts.js';
 import { getRewards } from './economy/getRewards.js';
 import { postEarnings } from './economy/postEarnings.js';
+import { postPayouts } from './economy/postPayouts.js';
 import { getIp } from './miscellaneous/getIp.js';
 import { getRoot } from './miscellaneous/getRoot.js';
 import { registerProvider } from './registerProvider.js';
@@ -34,6 +35,7 @@ export function applyRoutes(app: Express): void {
 
     app.get('/economy/payouts', registerProvider(getPayouts));
     app.delete('/economy/payouts', registerProvider(deletePayouts));
+    app.post('/economy/payouts', registerProvider(postPayouts));
 
     app.get('/users/@me', registerProvider(getMe));
 }
