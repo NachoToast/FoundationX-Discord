@@ -177,8 +177,8 @@
                     "429": {
                         "$ref": "#/components/responses/RateLimited429"
                     },
-                    "502": {
-                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    "501": {
+                        "$ref": "#/components/responses/SecondaryRequestError501"
                     }
                 }
             }
@@ -202,8 +202,8 @@
                     "429": {
                         "$ref": "#/components/responses/RateLimited429"
                     },
-                    "502": {
-                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    "501": {
+                        "$ref": "#/components/responses/SecondaryRequestError501"
                     }
                 }
             }
@@ -237,8 +237,8 @@
                     "429": {
                         "$ref": "#/components/responses/RateLimited429"
                     },
-                    "502": {
-                        "$ref": "#/components/responses/SecondaryRequestError502"
+                    "501": {
+                        "$ref": "#/components/responses/SecondaryRequestError501"
                     }
                 }
             }
@@ -1386,7 +1386,7 @@
                     }
                 }
             },
-            "SecondaryRequestError502": {
+            "SecondaryRequestError501": {
                 "description": "Error thrown when an API call made by the server to another server fails.",
                 "content": {
                     "application/json": {
