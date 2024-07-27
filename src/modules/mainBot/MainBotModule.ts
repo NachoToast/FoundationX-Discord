@@ -16,6 +16,7 @@ import { CommandDeployer } from './CommandDeployer.js';
 import { BalanceCommand } from './commands/Balance.js';
 import { Command } from './commands/Command.js';
 import { LinkCommand } from './commands/Link.js';
+import { PayoutsCommand } from './commands/Payouts.js';
 import { StatusCommand } from './commands/Status.js';
 import { ReactRoles } from './ReactRoles.js';
 
@@ -30,9 +31,12 @@ export class MainBotModule extends Module {
         this.client = new Client<true>({ intents: [GatewayIntentBits.Guilds] });
 
         this.commands = new Collection(
-            [new LinkCommand(), new StatusCommand(), new BalanceCommand()].map(
-                (command) => [command.name, command],
-            ),
+            [
+                new LinkCommand(),
+                new StatusCommand(),
+                new BalanceCommand(),
+                new PayoutsCommand(),
+            ].map((command) => [command.name, command]),
         );
 
         this.client.on(Events.InteractionCreate, (interaction) => {
