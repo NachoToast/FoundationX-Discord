@@ -51,6 +51,7 @@ export function validateConfig(config: Config): void {
                     deployTimeout.integer().finite().min(0);
                 })
                 .child('developerId', ['string', 'undefined'])
+                .child('histogramEmoji', ['string'])
                 .child('reactRoles', ['object', 'undefined'], (reactRoles) => {
                     reactRoles
                         .child('enabled', ['boolean'])

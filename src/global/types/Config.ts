@@ -27,6 +27,7 @@ export interface Config {
             loginTimeout: number;
             deployTimeout: number;
             developerId?: DiscordIdString;
+            histogramEmoji: string;
             reactRoles: {
                 enabled: boolean;
                 guildId: Snowflake;

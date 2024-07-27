@@ -21,6 +21,7 @@
             "loginTimeout": 10,
             "deployTimeout": 10,
             "developerId": "<user id>",
+            "histogramEmoji": "<:histogram:1166693406769172531>",
             "reactRoles": {
                 "enabled": true,
                 "guildId": "<guild id>",
