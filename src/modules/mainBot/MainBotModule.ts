@@ -14,6 +14,7 @@ import {
 import { Module, ModuleStartReturn, ModuleStartupResponse } from '../Module.js';
 import { CommandDeployer } from './CommandDeployer.js';
 import { BalanceCommand } from './commands/Balance.js';
+import { BaltopCommand } from './commands/Baltop.js';
 import { Command } from './commands/Command.js';
 import { LinkCommand } from './commands/Link.js';
 import { PayoutsCommand } from './commands/Payouts.js';
@@ -36,6 +37,7 @@ export class MainBotModule extends Module {
                 new StatusCommand(),
                 new BalanceCommand(),
                 new PayoutsCommand(),
+                new BaltopCommand(),
             ].map((command) => [command.name, command]),
         );
 
