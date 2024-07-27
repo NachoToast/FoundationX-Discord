@@ -13,6 +13,7 @@ import {
 } from '../../global/util/awaitOrTimeout.js';
 import { Module, ModuleStartReturn, ModuleStartupResponse } from '../Module.js';
 import { CommandDeployer } from './CommandDeployer.js';
+import { BalanceCommand } from './commands/Balance.js';
 import { Command } from './commands/Command.js';
 import { LinkCommand } from './commands/Link.js';
 import { StatusCommand } from './commands/Status.js';
@@ -29,10 +30,9 @@ export class MainBotModule extends Module {
         this.client = new Client<true>({ intents: [GatewayIntentBits.Guilds] });
 
         this.commands = new Collection(
-            [new LinkCommand(), new StatusCommand()].map((command) => [
-                command.name,
-                command,
-            ]),
+            [new LinkCommand(), new StatusCommand(), new BalanceCommand()].map(
+                (command) => [command.name, command],
+            ),
         );
 
         this.client.on(Events.InteractionCreate, (interaction) => {
