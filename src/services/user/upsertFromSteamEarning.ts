@@ -41,6 +41,7 @@ export async function upsertFromSteamEarning(
             rank: UserRank.None,
             discord: null,
             'steam.id': steamId,
+            manualSteamId: null,
             otherSteamConnections: [],
             'economy.lifetimePurchaseCount': 0,
             'meta.latestIp': null,

@@ -30,8 +30,14 @@ export const postEarnings: EndpointProvider<EarningsRequest> = {
             );
         });
 
-        await Promise.allSettled(promiseArr);
+        const results = await Promise.allSettled(promiseArr);
 
         res.sendStatus(200);
+
+        for (const result of results) {
+            if (result.status === 'rejected') {
+                console.error(result.reason);
+            }
+        }
     },
 };
