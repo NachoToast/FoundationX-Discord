@@ -16,6 +16,7 @@ import { CommandDeployer } from './CommandDeployer.js';
 import { BalanceCommand } from './commands/Balance.js';
 import { BaltopCommand } from './commands/Baltop.js';
 import { Command } from './commands/Command.js';
+import { EconomyAdmin } from './commands/EconomyAdmin.js';
 import { LinkCommand } from './commands/Link.js';
 import { PayoutsCommand } from './commands/Payouts.js';
 import { StatusCommand } from './commands/Status.js';
@@ -40,6 +41,7 @@ export class MainBotModule extends Module {
                 new PayoutsCommand(),
                 new BaltopCommand(),
                 new UserCommand(),
+                new EconomyAdmin(),
             ].map((command) => [command.name, command]),
         );
 
