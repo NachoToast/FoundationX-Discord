@@ -28,7 +28,10 @@ export async function upsertFromSteamEarning(
 
     const update: StrictUpdateFilter<UserDocument> = {
         $set: {
-            'steam.username': username,
+            steam: {
+                id: steamId,
+                username,
+            },
             'meta.lastSeenAt': now,
             'meta.lastSeenAtSteam': now,
         },
@@ -40,7 +43,6 @@ export async function upsertFromSteamEarning(
             _id: new ObjectId(),
             rank: UserRank.None,
             discord: null,
-            'steam.id': steamId,
             manualSteamId: null,
             otherSteamConnections: [],
             'economy.lifetimePurchaseCount': 0,
