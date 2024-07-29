@@ -19,6 +19,7 @@ import { Command } from './commands/Command.js';
 import { LinkCommand } from './commands/Link.js';
 import { PayoutsCommand } from './commands/Payouts.js';
 import { StatusCommand } from './commands/Status.js';
+import { UserCommand } from './commands/User.js';
 import { ReactRoles } from './ReactRoles.js';
 
 export class MainBotModule extends Module {
@@ -38,6 +39,7 @@ export class MainBotModule extends Module {
                 new BalanceCommand(),
                 new PayoutsCommand(),
                 new BaltopCommand(),
+                new UserCommand(),
             ].map((command) => [command.name, command]),
         );
 
