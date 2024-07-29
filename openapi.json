@@ -594,8 +594,11 @@
                     "401": {
                         "$ref": "#/components/responses/AuthError401"
                     },
+                    "402": {
+                        "$ref": "#/components/responses/BrokeError402"
+                    },
                     "403": {
-                        "$ref": "#/components/responses/BrokeError403"
+                        "$ref": "#/components/responses/ForbiddenError403"
                     },
                     "429": {
                         "$ref": "#/components/responses/RateLimited429"
@@ -893,9 +896,6 @@
                     },
                     "userDiscordId": {
                         "type": "string",
-                        "allOf": [
-                            { "$ref": "#/components/schemas/DiscordIdString" }
-                        ],
                         "nullable": true
                     },
                     "rewardId": {
@@ -1042,19 +1042,17 @@
                         "$ref": "#/components/schemas/UserRank"
                     },
                     "discord": {
-                        "type": "object",
-                        "nullable": true,
-                        "allOf": [
-                            { "$ref": "#/components/schemas/UserDiscord" }
+                        "oneOf": [
+                            { "$ref": "#/components/schemas/UserDiscord" },
+                            { "$ref": "#/components/schemas/Null" }
                         ]
                     },
                     "steam": {
-                        "type": "object",
-                        "nullable": true,
-                        "allOf": [
+                        "oneOf": [
                             {
                                 "$ref": "#/components/schemas/SteamConnection"
-                            }
+                            },
+                            { "$ref": "#/components/schemas/Null" }
                         ]
                     },
                     "otherSteamConnections": {
@@ -1131,7 +1129,14 @@
                         }
                     }
                 },
-                "required": ["id", "rank", "discord", "economy", "meta"],
+                "required": [
+                    "id",
+                    "rank",
+                    "discord",
+                    "steam",
+                    "economy",
+                    "meta"
+                ],
                 "additionalProperties": false
             },
             "UserDiscord": {
@@ -1204,6 +1209,10 @@
                 },
                 "minimum": 0,
                 "maximum": 31
+            },
+            "Null": {
+                "description": "Literal `null` value.",
+                "enum": [null]
             }
         },
         "responses": {
@@ -1290,7 +1299,7 @@
                     }
                 }
             },
-            "BrokeError403": {
+            "BrokeError402": {
                 "description": "Error thrown when a user lacks the required balance to do an attempted economy-related action.",
                 "content": {
                     "application/json": {

@@ -11,7 +11,7 @@ interface BrokeAmounts {
  * economy-related action.
  */
 export class BrokeError extends SiteError<BrokeAmounts> {
-    public override readonly statusCode = 403;
+    public override readonly statusCode = 402;
 
     public constructor(have: number, require: number) {
         super(
