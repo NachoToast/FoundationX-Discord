@@ -90,7 +90,9 @@ export class ReactRoles {
         const selfRolePosition = guild.members.me?.roles.botRole?.position;
 
         if (selfRolePosition === undefined) {
-            throw new Error(`Bot role not found in ${guild.name}`);
+            throw new Error(
+                `Bot role not found in ${guild.name} (${guild.id})`,
+            );
         }
 
         await Promise.all(
@@ -134,7 +136,7 @@ export class ReactRoles {
     private async fetchGuild(): Promise<void> {
         const { guildId } = AppGlobals.config.modules.mainBot.reactRoles;
 
-        const guild = await this.client.guilds.fetch(guildId);
+        const guild = await (await this.client.guilds.fetch(guildId)).fetch();
 
         if (guild instanceof Collection) {
             throw new Error(
