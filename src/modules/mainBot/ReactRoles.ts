@@ -63,10 +63,7 @@ export class ReactRoles {
 
         await this.fetchGuild();
 
-        await Promise.allSettled([
-            this.fetchChannel(),
-            this.validateRolePositions(),
-        ]);
+        await Promise.all([this.fetchChannel(), this.validateRolePositions()]);
 
         if (await this.fetchMessage()) {
             await this.updateExistingMessage();
