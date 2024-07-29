@@ -1055,6 +1055,12 @@
                             { "$ref": "#/components/schemas/Null" }
                         ]
                     },
+                    "manualSteamId": {
+                        "oneOf": [
+                            { "$ref": "#/components/schemas/SteamId64" },
+                            { "$ref": "#/components/schemas/Null" }
+                        ]
+                    },
                     "otherSteamConnections": {
                         "type": "array",
                         "items": {

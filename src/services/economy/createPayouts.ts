@@ -9,9 +9,15 @@ export async function createPayouts(
     user: UserDocument,
     rewardIds: string[],
 ): Promise<[PayoutDocument[], number]> {
-    const { steam } = user;
+    let userSteamId: string;
 
-    if (steam === null) {
+    const { steam, manualSteamId } = user;
+
+    if (steam !== null) {
+        userSteamId = steam.id;
+    } else if (manualSteamId !== null) {
+        userSteamId = manualSteamId;
+    } else {
         throw new ForbiddenError(
             'Missing Steam Connection',
             'A Steam link is required to purchase rewards.',
@@ -49,7 +55,7 @@ export async function createPayouts(
                 _id: new ObjectId(),
                 purchasedAt: now,
                 userId: user._id.toHexString(),
-                userSteamId: steam.id,
+                userSteamId,
                 userDiscordId: user.discord?.id ?? null,
                 rewardId: reward.id,
                 costPaid: reward.cost,

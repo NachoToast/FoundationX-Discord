@@ -22,6 +22,7 @@ export async function createFromDiscord(
             lastUpdatedAt: now,
         },
         steam: steamConnections.at(0) ?? null,
+        manualSteamId: null,
         otherSteamConnections: steamConnections.slice(1),
         economy: {
             balance: 0,

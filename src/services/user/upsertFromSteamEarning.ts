@@ -16,9 +16,15 @@ export async function upsertFromSteamEarning(
 ): Promise<void> {
     const now = Date.now();
 
-    const filter: StrictFilter<UserDocument> = {
+    const filter1: StrictFilter<UserDocument> = {
         'steam.id': steamId,
     };
+
+    const filter2: StrictFilter<UserDocument> = {
+        manualSteamId: steamId,
+    };
+
+    const filter: StrictFilter<UserDocument> = { $or: [filter1, filter2] };
 
     const update: StrictUpdateFilter<UserDocument> = {
         $set: {

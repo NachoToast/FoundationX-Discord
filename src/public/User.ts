@@ -20,6 +20,8 @@ export interface User {
 
     steam?: SteamConnection | null;
 
+    manualSteamId?: string | null;
+
     otherSteamConnections?: SteamConnection[];
 
     economy: {
