@@ -68,23 +68,5 @@ export class BaltopCommand extends Command {
             .setDescription(output.join('\n'));
 
         await interaction.editReply({ embeds: [embed] });
-
-        // const users = await UserService.getTopEarners();
-
-        // const output: string[] = [
-        //     'The richest users are:',
-        // ];
-
-        // const usersAndBalances = new Map(users.map((user) => [user, user.economy.balance]));
-
-        // const maxBalance = Math.max(...usersAndBalances.values());
-
-        // const output: string[] = [
-        //     ``
-        // ]
-
-        // await interaction.reply({
-        //     content: output.join('\n'),
-        // });
     }
 }
