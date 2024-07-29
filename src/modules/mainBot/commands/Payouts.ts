@@ -57,7 +57,14 @@ export class PayoutsCommand extends Command {
         ];
 
         if (rewardCounts.size > 10) {
-            output.push(Array.from(rewardCounts.values()).join(', '));
+            output.push(
+                Array.from(rewardCounts.entries())
+                    .map(
+                        ([reward, count]) =>
+                            `${reward.title} x${count.toString()}`,
+                    )
+                    .join(', '),
+            );
         } else {
             for (const [reward, count] of rewardCounts) {
                 output.push(`- ${reward.title} x${count.toString()}`);
