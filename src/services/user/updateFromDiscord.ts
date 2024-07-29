@@ -21,7 +21,16 @@ export async function updateFromDiscord(
 ): Promise<UserDocument> {
     const now = Date.now();
 
-    const filter: StrictFilter<UserDocument> = { 'discord.id': discord.id };
+    const filterConditions: StrictFilter<UserDocument>[] = [
+        { 'discord.id': discord.id },
+    ];
+
+    const firstSteamConnection = steamConnections.at(0) ?? null;
+    if (firstSteamConnection !== null) {
+        filterConditions.push({ 'steam.id': firstSteamConnection.id });
+    }
+
+    const filter: StrictFilter<UserDocument> = { $or: filterConditions };
 
     const update: StrictUpdateFilter<UserDocument> = {
         $set: {
@@ -30,7 +39,7 @@ export async function updateFromDiscord(
             'discord.avatar': discord.avatar,
             'discord.lastUpdatedAt': now,
 
-            steam: steamConnections.at(0) ?? null,
+            steam: firstSteamConnection,
             otherSteamConnections: steamConnections.slice(1),
 
             'meta.latestIp': ip,
