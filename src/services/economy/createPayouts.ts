@@ -9,6 +9,14 @@ export async function createPayouts(
     user: UserDocument,
     rewardIds: string[],
 ): Promise<[PayoutDocument[], number]> {
+    if ((user.economy.pendingPayouts ?? 0) >= 20) {
+        // TODO: make 403 better
+        throw new ForbiddenError(
+            `Too many pending payouts`,
+            `Please redeem your ${user.economy.pendingPayouts?.toString() ?? '0'} pending payouts before purchasing more rewards`,
+        );
+    }
+
     let userSteamId: string;
 
     const { steam, manualSteamId } = user;
@@ -71,7 +79,12 @@ export async function createPayouts(
         getPayoutDb().insertMany(payouts),
         getUserDb().updateOne(
             { _id: user._id },
-            { $inc: { 'economy.balance': -actualSpent } },
+            {
+                $inc: {
+                    'economy.balance': -actualSpent,
+                    'economy.lifetimePurchaseCount': payouts.length,
+                },
+            },
         ),
     ]);
 

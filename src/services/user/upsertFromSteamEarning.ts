@@ -46,6 +46,7 @@ export async function upsertFromSteamEarning(
             manualSteamId: null,
             otherSteamConnections: [],
             'economy.lifetimePurchaseCount': 0,
+            'economy.pendingPayouts': 0,
             'meta.latestIp': null,
             'meta.firstSeenAt': now,
             'meta.firstSeenAtSteam': now,

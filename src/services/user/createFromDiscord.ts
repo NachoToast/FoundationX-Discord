@@ -28,6 +28,7 @@ export async function createFromDiscord(
             balance: 0,
             lifetimeBalance: 0,
             lifetimePurchaseCount: 0,
+            pendingPayouts: 0,
         },
         meta: {
             latestIp: ip,

@@ -1,6 +1,6 @@
 import { convertId } from '../../../../global/util/idHelpers.js';
 import { Payout } from '../../../../public/Payout.js';
-import { EconomyService } from '../../../../services/index.js';
+import { EconomyService, UserService } from '../../../../services/index.js';
 import { AuthScope } from '../../types/auth/AuthScope.js';
 import { EndpointProvider } from '../../types/express/EndpointProvider.js';
 
@@ -17,6 +17,8 @@ export const postPayouts: EndpointProvider<string[], PayoutsResponse> = {
             user,
             req.body,
         );
+
+        await UserService.modifyUserPayoutCount(user._id, created.length);
 
         res.status(200).json({
             createdItems: created.map((e) => convertId(e)),

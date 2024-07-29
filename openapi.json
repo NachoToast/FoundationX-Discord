@@ -558,7 +558,8 @@
                                 "items": {
                                     "type": "string",
                                     "example": "66a0879f721ca9bfa3e854dd"
-                                }
+                                },
+                                "maxItems": 20
                             }
                         }
                     }
@@ -1077,6 +1078,9 @@
                                 "type": "integer"
                             },
                             "lifetimePurchaseCount": {
+                                "type": "integer"
+                            },
+                            "pendingPayouts": {
                                 "type": "integer"
                             }
                         },

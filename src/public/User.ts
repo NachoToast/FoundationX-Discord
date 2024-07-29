@@ -30,6 +30,8 @@ export interface User {
         lifetimeBalance: number;
 
         lifetimePurchaseCount: number;
+
+        pendingPayouts: number | undefined;
     };
 
     meta: {
