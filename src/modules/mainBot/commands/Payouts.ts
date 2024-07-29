@@ -56,8 +56,12 @@ export class PayoutsCommand extends Command {
             `You have ${totalCount.toString()} pending payout${totalCount !== 1 ? 's' : ''}:`,
         ];
 
-        for (const [reward, count] of rewardCounts) {
-            output.push(`- ${reward.title} x${count.toString()}`);
+        if (rewardCounts.size > 10) {
+            output.push(Array.from(rewardCounts.values()).join(', '));
+        } else {
+            for (const [reward, count] of rewardCounts) {
+                output.push(`- ${reward.title} x${count.toString()}`);
+            }
         }
 
         await interaction.reply({
