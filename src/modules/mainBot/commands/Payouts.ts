@@ -22,11 +22,6 @@ export class PayoutsCommand extends Command {
         let totalCount = 0;
 
         for (const payout of payouts) {
-            console.log(
-                payout._id,
-                rewards.find((e) => e.id === payout.rewardId)?.title,
-            );
-
             const reward = rewards.find((e) => e.id === payout.rewardId);
 
             if (reward === undefined) continue;
