@@ -28,6 +28,7 @@ export class UserCommand extends Command {
             } else if (user.manualSteamId !== null) {
                 await interaction.reply({
                     content: `You Steam account has been manually set to [${user.manualSteamId}](https://steamcommunity.com/profiles/${user.manualSteamId})`,
+                    ephemeral,
                 });
             } else {
                 await interaction.reply({
