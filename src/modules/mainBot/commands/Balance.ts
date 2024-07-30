@@ -18,7 +18,7 @@ export class BalanceCommand extends Command {
             );
 
             await interaction.reply({
-                content: `Your have **${user.economy.balance.toLocaleString()}** medals!`,
+                content: `You have **${user.economy.balance.toLocaleString()}** medals!`,
             });
         } catch (error) {
             if (error instanceof NotFoundError) {
