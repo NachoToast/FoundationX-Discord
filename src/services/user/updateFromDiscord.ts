@@ -34,10 +34,12 @@ export async function updateFromDiscord(
 
     const update: StrictUpdateFilter<UserDocument> = {
         $set: {
-            'discord.id': discord.id,
-            'discord.username': discord.username,
-            'discord.avatar': discord.avatar,
-            'discord.lastUpdatedAt': now,
+            discord: {
+                id: discord.id,
+                username: discord.username,
+                avatar: discord.avatar,
+                lastUpdatedAt: now,
+            },
 
             steam: firstSteamConnection,
             otherSteamConnections: steamConnections.slice(1),
