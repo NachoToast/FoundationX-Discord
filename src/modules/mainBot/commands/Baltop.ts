@@ -1,5 +1,10 @@
-import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { UserService } from '../../../services/index.js';
+import { UserDocument } from '../../../services/user/db.js';
 import { getBestName } from '../util/getBestName.js';
 import { makeHistogramLine } from '../util/histogram.js';
 import { medalGenerator } from '../util/medalGenerator.js';
@@ -17,9 +22,18 @@ export class BaltopCommand extends Command {
 
         await interaction.deferReply();
 
+        const isLifetime = !!interaction.options.getBoolean('lifetime');
+
+        const getValue = isLifetime
+            ? (user: UserDocument): number => user.economy.lifetimeBalance
+            : (user: UserDocument): number => user.economy.balance;
+
         const [leaderboard, thisUser] = await Promise.all([
-            UserService.getTopEarners(),
-            UserService.getRank(interaction.user.id, 'economy.balance'),
+            UserService.getTopEarners(isLifetime),
+            UserService.getRank(
+                interaction.user.id,
+                isLifetime ? 'economy.lifetimeBalance' : 'economy.balance',
+            ),
         ]);
 
         if (leaderboard.length === 0) {
@@ -31,7 +45,7 @@ export class BaltopCommand extends Command {
 
         const output = new Array<string>(leaderboard.length);
 
-        const maxValue = Math.max(...leaderboard.map((e) => e.economy.balance));
+        const maxValue = Math.max(...leaderboard.map((e) => getValue(e)));
 
         const medals = medalGenerator();
 
@@ -43,7 +57,7 @@ export class BaltopCommand extends Command {
                 continue;
             }
 
-            const { balance } = user.economy;
+            const balance = getValue(user);
 
             output[i] =
                 `${makeHistogramLine(balance, maxValue, 10, '')} ${medals.next().value} ${getBestName(user)} - ${balance.toLocaleString()}`;
@@ -57,16 +71,30 @@ export class BaltopCommand extends Command {
                 output.push('...');
             }
 
+            const balance = getValue(thisUser);
+
             output.push(
-                `${makeHistogramLine(thisUser.economy.balance, maxValue, 10, '')} **#${thisUser.rankingForStat.toString()}** ${getBestName(thisUser)} - ${thisUser.economy.balance.toLocaleString()}`,
+                `${makeHistogramLine(balance, maxValue, 10, '')} **#${thisUser.rankingForStat.toString()}** ${getBestName(thisUser)} - ${balance.toLocaleString()}`,
             );
         }
 
         const embed = new EmbedBuilder()
             .setColor(embedColour)
-            .setTitle(`Richest Users`)
+            .setTitle(`Richest Users${isLifetime ? ` (Lifetime)` : ''}`)
             .setDescription(output.join('\n'));
 
         await interaction.editReply({ embeds: [embed] });
+    }
+
+    public override build(): SlashCommandBuilder {
+        const base = super.build();
+
+        base.addBooleanOption((option) => {
+            return option
+                .setName('lifetime')
+                .setDescription('Show lifetime balances instead of current');
+        });
+
+        return base;
     }
 }
