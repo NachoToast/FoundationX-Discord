@@ -28,6 +28,8 @@ export class EconomyAdmin extends Command {
                 content: 'You are not allowed to use this command',
                 ephemeral: true,
             });
+
+            return;
         }
 
         const subCommand = interaction.options.getSubcommand();
