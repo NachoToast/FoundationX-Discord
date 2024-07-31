@@ -15,7 +15,7 @@ export async function getRank(
             $setWindowFields: {
                 sortBy: { [key]: -1 },
                 output: {
-                    rank: { $rank: {} },
+                    rankingForStat: { $rank: {} },
                 },
             },
         },
