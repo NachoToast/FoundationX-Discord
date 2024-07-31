@@ -2,7 +2,6 @@ import {
     ChatInputCommandInteraction,
     EmbedBuilder,
     SlashCommandBuilder,
-    userMention,
 } from 'discord.js';
 import { UserService } from '../../../services/index.js';
 import { UserDocument } from '../../../services/user/db.js';
@@ -60,14 +59,8 @@ export class BaltopCommand extends Command {
 
             const balance = getValue(user);
 
-            const chosenName =
-                user.discord &&
-                interaction.client.users.cache.has(user.discord.id)
-                    ? userMention(user.discord.id)
-                    : getBestName(user);
-
             output[i] =
-                `${makeHistogramLine(balance, maxValue, 10, '')} ${medals.next().value} ${chosenName} - ${balance.toLocaleString()}`;
+                `${makeHistogramLine(balance, maxValue, 10, '')} ${medals.next().value} ${getBestName(user)} - ${balance.toLocaleString()}`;
         }
 
         if (
