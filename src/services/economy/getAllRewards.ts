@@ -333,6 +333,16 @@ export function getAllRewards(): EconomyReward[] {
             image: 'micro-hid',
             itemId: 16,
         },
+        {
+            title: 'Lantern',
+            subtitle: 'An oil lantern that never runs out of fuel.',
+            description:
+                'A seemingly normal oil lantern that never runs out of fuel.',
+            cost: 50,
+            quantity: 1,
+            image: 'lantern',
+            itemId: 54,
+        },
         // MARK: Keycards
         {
             title: 'Janitor Keycard',
