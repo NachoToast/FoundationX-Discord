@@ -22,17 +22,17 @@ export class BaltopCommand extends Command {
 
         await interaction.deferReply();
 
-        const isLifetime = !!interaction.options.getBoolean('lifetime');
+        const isCurrent = !!interaction.options.getBoolean('current');
 
-        const getValue = isLifetime
-            ? (user: UserDocument): number => user.economy.lifetimeBalance
-            : (user: UserDocument): number => user.economy.balance;
+        const getValue = isCurrent
+            ? (user: UserDocument): number => user.economy.balance
+            : (user: UserDocument): number => user.economy.lifetimeBalance;
 
         const [leaderboard, thisUser] = await Promise.all([
-            UserService.getTopEarners(isLifetime),
+            UserService.getTopEarners(!isCurrent),
             UserService.getRank(
                 interaction.user.id,
-                isLifetime ? 'economy.lifetimeBalance' : 'economy.balance',
+                isCurrent ? 'economy.balance' : 'economy.lifetimeBalance',
             ),
         ]);
 
@@ -80,7 +80,7 @@ export class BaltopCommand extends Command {
 
         const embed = new EmbedBuilder()
             .setColor(embedColour)
-            .setTitle(`Richest Users${isLifetime ? ` (Lifetime)` : ''}`)
+            .setTitle(`Richest Users${isCurrent ? '' : ` (Lifetime)`}`)
             .setDescription(output.join('\n'));
 
         await interaction.editReply({ embeds: [embed] });
@@ -91,8 +91,8 @@ export class BaltopCommand extends Command {
 
         base.addBooleanOption((option) => {
             return option
-                .setName('lifetime')
-                .setDescription('Show lifetime balances instead of current');
+                .setName('current')
+                .setDescription('Show current balance instead of lifetime');
         });
 
         return base;
