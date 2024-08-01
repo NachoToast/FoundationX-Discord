@@ -142,6 +142,16 @@ export function getAllRewards(): EconomyReward[] {
             itemId: 30,
         },
         {
+            title: '.44 Revolver',
+            subtitle: 'A powerful magnum pistol.',
+            description:
+                'A slow firing but high firepower sidearm commonly seen among members of the Chaos Insurgency.',
+            cost: 130,
+            quantity: 1,
+            image: '44-revolver',
+            itemId: 39,
+        },
+        {
             title: 'FSP-9',
             subtitle: 'A standard submachine gun.',
             description:
