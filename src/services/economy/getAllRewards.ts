@@ -209,7 +209,7 @@ export function getAllRewards(): EconomyReward[] {
             cost: 450,
             quantity: 1,
             image: 'fr-mg-0',
-            itemId: 525,
+            itemId: 52,
         },
         // MARK: Special Items
         {
